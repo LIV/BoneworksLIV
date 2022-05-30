@@ -1,4 +1,5 @@
-﻿using MelonLoader;
+﻿using LIV.SDK.Unity;
+using MelonLoader;
 
 namespace BoneworksLIV
 {
@@ -7,6 +8,7 @@ namespace BoneworksLIV
 		public override void OnApplicationStart()
 		{
 			base.OnApplicationStart();
+			SDKShaders.LoadFromAssetBundle(AssetManager.LoadBundle("liv-shaders"));
 		}
 	}
 }

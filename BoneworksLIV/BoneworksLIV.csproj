@@ -44,6 +44,45 @@
           <HintPath>..\..\..\AppData\Roaming\r2modmanPlus-local\BONEWORKS\profiles\Default\MelonLoader\Managed\Assembly-CSharp-firstpass.dll</HintPath>
           <Private>False</Private>
         </Reference>
+        <Reference Include="Il2CppMono.Security">
+          <HintPath>..\..\..\AppData\Roaming\r2modmanPlus-local\BONEWORKS\profiles\Default\MelonLoader\Managed\Il2CppMono.Security.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Il2Cppmscorlib">
+          <HintPath>..\..\..\AppData\Roaming\r2modmanPlus-local\BONEWORKS\profiles\Default\MelonLoader\Managed\Il2Cppmscorlib.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Il2CppSystem">
+          <HintPath>..\..\..\AppData\Roaming\r2modmanPlus-local\BONEWORKS\profiles\Default\MelonLoader\Managed\Il2CppSystem.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Il2CppSystem.Configuration">
+          <HintPath>..\..\..\AppData\Roaming\r2modmanPlus-local\BONEWORKS\profiles\Default\MelonLoader\Managed\Il2CppSystem.Configuration.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Il2CppSystem.Core">
+          <HintPath>..\..\..\AppData\Roaming\r2modmanPlus-local\BONEWORKS\profiles\Default\MelonLoader\Managed\Il2CppSystem.Core.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Il2CppSystem.Runtime.Serialization">
+          <HintPath>..\..\..\AppData\Roaming\r2modmanPlus-local\BONEWORKS\profiles\Default\MelonLoader\Managed\Il2CppSystem.Runtime.Serialization.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Il2CppSystem.Xml">
+          <HintPath>..\..\..\AppData\Roaming\r2modmanPlus-local\BONEWORKS\profiles\Default\MelonLoader\Managed\Il2CppSystem.Xml.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Il2CppSystem.Xml.Linq">
+          <HintPath>..\..\..\AppData\Roaming\r2modmanPlus-local\BONEWORKS\profiles\Default\MelonLoader\Managed\Il2CppSystem.Xml.Linq.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="Il2CppValve.Newtonsoft.Json">
+          <HintPath>..\..\..\AppData\Roaming\r2modmanPlus-local\BONEWORKS\profiles\Default\MelonLoader\Managed\Il2CppValve.Newtonsoft.Json.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
+        <Reference Include="LIV">
+          <HintPath>..\BoneworksLivUnity\Build\BoneworksLivUnity_Data\Managed\LIV.dll</HintPath>
+        </Reference>
         <Reference Include="MelonLoader">
           <HintPath>..\..\..\AppData\Roaming\r2modmanPlus-local\BONEWORKS\profiles\Default\MelonLoader\MelonLoader.dll</HintPath>
           <Private>False</Private>
@@ -52,6 +91,10 @@
         <Reference Include="System.Core" />
         <Reference Include="System.Data" />
         <Reference Include="System.Xml" />
+        <Reference Include="UnhollowerBaseLib">
+          <HintPath>..\..\..\AppData\Roaming\r2modmanPlus-local\BONEWORKS\profiles\Default\MelonLoader\Managed\UnhollowerBaseLib.dll</HintPath>
+          <Private>False</Private>
+        </Reference>
         <Reference Include="Unity.Analytics.DataPrivacy">
           <HintPath>..\..\..\AppData\Roaming\r2modmanPlus-local\BONEWORKS\profiles\Default\MelonLoader\Managed\Unity.Analytics.DataPrivacy.dll</HintPath>
           <Private>False</Private>
@@ -326,9 +369,20 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
+        <Compile Include="AssetManager.cs" />
         <Compile Include="BoneworksLivPlugin.cs" />
         <Compile Include="Patches.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
+    </ItemGroup>
+    <ItemGroup>
+      <Content Include="..\BoneworksLivUnity\AssetBundles\liv-shaders">
+        <Link>LIVAssets\liv-shaders</Link>
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+      <Content Include="..\BoneworksLivUnity\AssetBundles\liv-shaders.manifest">
+        <Link>LIVAssets\liv-shaders.manifest</Link>
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
