@@ -16,21 +16,31 @@ namespace BoneworksLIV
 			// var shaders = livAssetBundle.LoadAll<Shader>();
 			
 			MelonLogger.Msg("### livAssetBundle exists? " + (livAssetBundle != null));
-			
+			ClassInjector.RegisterTypeInIl2Cpp<LIV.SDK.Unity.LIV>();
 			SDKShaders.LoadFromAssetBundle(livAssetBundle);
 
 		}
+
+		private LIV.SDK.Unity.LIV liv;
+		private GameObject livObject;
 
 		public override void OnUpdate()
 		{
 			base.OnUpdate();
 			if (Input.GetKeyDown(KeyCode.L))
 			{
-				var livAssetBundle = AssetManager.LoadBundle("liv-shaders");
-
-				SDKShaders.LoadFromAssetBundle(livAssetBundle);
-				// var shaders = livAssetBundle.LoadAll<Shader>();
-				// SDKShaders.LoadFromAssetBundle(AssetManager.LoadBundle("liv-shaders"));
+				MelonLogger.Msg("Pressed L");
+				if (livObject)
+				{
+					Object.Destroy(livObject);
+				}
+				livObject = new GameObject("LIV");
+				livObject.SetActive(false);
+				liv = livObject.AddComponent<LIV.SDK.Unity.LIV>();
+				liv.HMDCamera = Camera.main;
+				liv.stage = Camera.main.transform.parent;
+				liv.fixPostEffectsAlpha = true;
+				livObject.SetActive(true);
 			}
 		}
 	}

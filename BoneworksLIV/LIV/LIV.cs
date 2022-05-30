@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.Serialization;
 using Il2CppSystem.Collections;
-using Il2CppSystem;
+using System;
 
 #if UNITY_2017_2_OR_NEWER
 using UnityEngine.XR;
@@ -60,6 +60,8 @@ namespace LIV.SDK.Unity
     /// </example>
     public class LIV : MonoBehaviour
     {
+        public LIV(IntPtr ptr) : base(ptr) {}
+
         /// <summary>
         /// triggered when the LIV SDK is activated by the LIV App and enabled by the game.
         /// </summary>

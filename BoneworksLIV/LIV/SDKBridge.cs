@@ -10,104 +10,104 @@ namespace LIV.SDK.Unity
         #if (UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN) && UNITY_64
         #region Interop
 
-        [DllImport("LIV_Bridge")]
+        [DllImport("BONEWORKS_Data/Plugins/LIV_Bridge.dll")]
         static extern IntPtr GetRenderEventFunc();
 
-        [DllImport("LIV_Bridge", EntryPoint = "LivCaptureIsActive")]
+        [DllImport("BONEWORKS_Data/Plugins/LIV_Bridge.dll", EntryPoint = "LivCaptureIsActive")]
         [return: MarshalAs(UnmanagedType.U1)]
         static extern bool GetIsCaptureActive();
 
-        [DllImport("LIV_Bridge", EntryPoint = "LivCaptureWidth")]
+        [DllImport("BONEWORKS_Data/Plugins/LIV_Bridge.dll", EntryPoint = "LivCaptureWidth")]
         static extern int GetTextureWidth();
 
-        [DllImport("LIV_Bridge", EntryPoint = "LivCaptureHeight")]
+        [DllImport("BONEWORKS_Data/Plugins/LIV_Bridge.dll", EntryPoint = "LivCaptureHeight")]
         static extern int GetTextureHeight();
 
-        [DllImport("LIV_Bridge", EntryPoint = "LivCaptureSetTextureFromUnity")]
+        [DllImport("BONEWORKS_Data/Plugins/LIV_Bridge.dll", EntryPoint = "LivCaptureSetTextureFromUnity")]
         static extern void SetTexture(IntPtr texture);
 
         //// Acquire a frame from the compositor, allowing atomic access to its properties - most current one by default
-        [DllImport("LIV_Bridge", EntryPoint = "AcquireCompositorFrame")]
+        [DllImport("BONEWORKS_Data/Plugins/LIV_Bridge.dll", EntryPoint = "AcquireCompositorFrame")]
         public static extern int AcquireCompositorFrame(ulong timestamp);
 
-        [DllImport("LIV_Bridge", EntryPoint = "ReleaseCompositorFrame")]
+        [DllImport("BONEWORKS_Data/Plugins/LIV_Bridge.dll", EntryPoint = "ReleaseCompositorFrame")]
         public static extern int ReleaseCompositorFrame();
 
         // Get timestamp of SDK2 object (C# timestamp) - must be an object in the bridge, not a copy.
-        [DllImport("LIV_Bridge", EntryPoint = "GetObjectTimeStamp")]
+        [DllImport("BONEWORKS_Data/Plugins/LIV_Bridge.dll", EntryPoint = "GetObjectTimeStamp")]
         public static extern ulong GetObjectTimeStamp(IntPtr obj);
 
         // Get current time in C# ticks
-        [DllImport("LIV_Bridge", EntryPoint = "GetCurrentTimeTicks")]
+        [DllImport("BONEWORKS_Data/Plugins/LIV_Bridge.dll", EntryPoint = "GetCurrentTimeTicks")]
         static extern ulong GetCurrentTimeTicks();
 
         // Get object tag of SDK2 object - must be an object in the bridge, not a copy.
-        [DllImport("LIV_Bridge", EntryPoint = "GetObjectTag")]
+        [DllImport("BONEWORKS_Data/Plugins/LIV_Bridge.dll", EntryPoint = "GetObjectTag")]
         public static extern ulong GetObjectTag(IntPtr obj);
 
         // Get a frame object from the compositor
-        [DllImport("LIV_Bridge", EntryPoint = "GetCompositorFrameObject")]
+        [DllImport("BONEWORKS_Data/Plugins/LIV_Bridge.dll", EntryPoint = "GetCompositorFrameObject")]
         public static extern IntPtr GetCompositorFrameObject(ulong tag);
 
         // Get a frame object from the compositor
-        [DllImport("LIV_Bridge", EntryPoint = "GetViewportTexture")]
+        [DllImport("BONEWORKS_Data/Plugins/LIV_Bridge.dll", EntryPoint = "GetViewportTexture")]
         public static extern IntPtr GetViewportTexture();
 
         // Get a channel object from the compositor
-        [DllImport("LIV_Bridge", EntryPoint = "GetCompositorChannelObject")]
+        [DllImport("BONEWORKS_Data/Plugins/LIV_Bridge.dll", EntryPoint = "GetCompositorChannelObject")]
         public static extern IntPtr GetCompositorChannelObject(int slot, ulong tag, ulong timestamp);
 
         // Get a channel object from our own source channel
-        [DllImport("LIV_Bridge", EntryPoint = "GetChannelObject")]
+        [DllImport("BONEWORKS_Data/Plugins/LIV_Bridge.dll", EntryPoint = "GetChannelObject")]
         public static extern IntPtr GetChannelObject(int slot, ulong tag, ulong timestamp);
 
         // Write an object to our channel
-        [DllImport("LIV_Bridge", EntryPoint = "AddObjectToChannel")]
+        [DllImport("BONEWORKS_Data/Plugins/LIV_Bridge.dll", EntryPoint = "AddObjectToChannel")]
         public static extern int AddObjectToChannel(int slot, IntPtr obj, int objectsize, ulong tag);
 
         // Write an object to the compostor's channel
-        [DllImport("LIV_Bridge", EntryPoint = "AddObjectToCompositorChannel")]
+        [DllImport("BONEWORKS_Data/Plugins/LIV_Bridge.dll", EntryPoint = "AddObjectToCompositorChannel")]
         public static extern int AddObjectToCompositorChannel(int slot, IntPtr obj, int objectsize, ulong tag);
 
         // Add a structure/object to the current frame / Considering if its simpler to combine with AddObjectToChannel with 0 being the frame
-        [DllImport("LIV_Bridge", EntryPoint = "AddObjectToFrame")]
+        [DllImport("BONEWORKS_Data/Plugins/LIV_Bridge.dll", EntryPoint = "AddObjectToFrame")]
         public static extern int AddObjectToFrame(IntPtr obj, int objectsize, ulong tag);
 
         // Helper to add strings 
-        [DllImport("LIV_Bridge", EntryPoint = "AddObjectToFrame")]
+        [DllImport("BONEWORKS_Data/Plugins/LIV_Bridge.dll", EntryPoint = "AddObjectToFrame")]
         public static extern int AddStringToFrame(IntPtr str, ulong tag);
 
-        [DllImport("LIV_Bridge", EntryPoint = "AddStringToChannel")]
+        [DllImport("BONEWORKS_Data/Plugins/LIV_Bridge.dll", EntryPoint = "AddStringToChannel")]
         public static extern int AddStringToChannel(int slot, IntPtr str, int length, ulong tag);
 
         // Create a new frame for rendering / native code does this already - so probably don't use
-        [DllImport("LIV_Bridge", EntryPoint = "NewFrame")]
+        [DllImport("BONEWORKS_Data/Plugins/LIV_Bridge.dll", EntryPoint = "NewFrame")]
         public static extern int NewFrame();
 
         // Commit the frame early - not recommended - best to let the next NewFrame commit the frame to avoid pipeline stalls
-        [DllImport("LIV_Bridge", EntryPoint = "CommitFrame")]
+        [DllImport("BONEWORKS_Data/Plugins/LIV_Bridge.dll", EntryPoint = "CommitFrame")]
         public static extern IntPtr CommitFrame();
 
         // Add a copy of a unity texture to the bridge
-        [DllImport("LIV_Bridge", EntryPoint = "addsharedtexture")]
+        [DllImport("BONEWORKS_Data/Plugins/LIV_Bridge.dll", EntryPoint = "addsharedtexture")]
         public static extern int addsharedtexture(int width, int height, int format, IntPtr sourcetexture, ulong tag);
 
-        [DllImport("LIV_Bridge", EntryPoint = "addtexture")]
+        [DllImport("BONEWORKS_Data/Plugins/LIV_Bridge.dll", EntryPoint = "addtexture")]
         public static extern int addtexture(IntPtr sourcetexture, ulong tag);
 
-        [DllImport("LIV_Bridge", EntryPoint = "PublishTextures")]
+        [DllImport("BONEWORKS_Data/Plugins/LIV_Bridge.dll", EntryPoint = "PublishTextures")]
         public static extern void PublishTextures();
 
-        [DllImport("LIV_Bridge", EntryPoint = "updateinputframe")]
+        [DllImport("BONEWORKS_Data/Plugins/LIV_Bridge.dll", EntryPoint = "updateinputframe")]
         public static extern IntPtr updatinputframe(IntPtr InputFrame);
 
-        [DllImport("LIV_Bridge", EntryPoint = "setinputframe")]
+        [DllImport("BONEWORKS_Data/Plugins/LIV_Bridge.dll", EntryPoint = "setinputframe")]
         public static extern IntPtr setinputframe(float x, float y, float z, float q0, float q1, float q2, float q3, float fov, int priority);
 
-        [DllImport("LIV_Bridge", EntryPoint = "setfeature")]
+        [DllImport("BONEWORKS_Data/Plugins/LIV_Bridge.dll", EntryPoint = "setfeature")]
         public static extern ulong setfeature(ulong feature);
 
-        [DllImport("LIV_Bridge", EntryPoint = "clearfeature")]
+        [DllImport("BONEWORKS_Data/Plugins/LIV_Bridge.dll", EntryPoint = "clearfeature")]
         public static extern ulong clearfeature(ulong feature);
         #endregion
         #else
