@@ -319,9 +319,9 @@ namespace LIV.SDK.Unity
         public static void CleanCameraBehaviours(Camera camera, string[] excludeBehaviours)
         {
             // Remove all children from camera clone.
-            foreach (Transform child in camera.transform)
+            foreach (var child in camera.transform)
             {
-                Object.Destroy(child.gameObject);
+                Object.Destroy((Object)child);
             }
 
             if (excludeBehaviours == null) return;

@@ -39,14 +39,14 @@ namespace LIV.SDK.Unity
                 MelonLogger.Msg("### creating ShaderCache...");
                 try
                 {
-                    ClipPlaneSimple = bundle.LoadAsset<Shader>("LIV_ClipPlaneSimple");
-                    ClipPlaneSimpleDebug = bundle.LoadAsset<Shader>("LIV_ClipPlaneSimpleDebug");
-                    ClipPlaneComplex = bundle.LoadAsset<Shader>("LIV_ClipPlaneComplex");
-                    ClipPlaneComplexDebug = bundle.LoadAsset<Shader>("LIV_ClipPlaneComplexDebug");
-                    WriteOpaqueToAlpha = bundle.LoadAsset<Shader>("LIV_WriteOpaqueToAlpha");
-                    CombineAlpha = bundle.LoadAsset<Shader>("LIV_CombineAlpha");
-                    Write = bundle.LoadAsset<Shader>("LIV_Write");
-                    ForceForwardRendering = bundle.LoadAsset<Shader>("LIV_ForceForwardRendering");
+                    ClipPlaneSimple = LoadShader(bundle, "LIV_ClipPlaneSimple");
+                    ClipPlaneSimpleDebug = LoadShader(bundle, "LIV_ClipPlaneSimpleDebug");
+                    ClipPlaneComplex = LoadShader(bundle, "LIV_ClipPlaneComplex");
+                    ClipPlaneComplexDebug = LoadShader(bundle, "LIV_ClipPlaneComplexDebug");
+                    WriteOpaqueToAlpha = LoadShader(bundle, "LIV_WriteOpaqueToAlpha");
+                    CombineAlpha = LoadShader(bundle, "LIV_CombineAlpha");
+                    Write = LoadShader(bundle, "LIV_Write");
+                    ForceForwardRendering = LoadShader(bundle, "LIV_ForceForwardRendering");
 
                     state = ClipPlaneSimple != null &&
                         ClipPlaneSimpleDebug != null &&
@@ -65,6 +65,13 @@ namespace LIV.SDK.Unity
                     MelonLogger.Error($"Failed to initialize the ShaderCache from asset bundle {bundle.name} : {e}");
                     state = false;
                 }
+            }
+
+            private static Shader LoadShader(AssetBundle bundle, string name)
+            {
+                var shader = bundle.LoadAsset<Shader>(name);
+                shader.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+                return shader;
             }
 
             //Note, if we come up with *one more shader* to put in there, make a damn Dictonary

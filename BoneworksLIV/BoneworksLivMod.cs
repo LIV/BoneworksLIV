@@ -27,7 +27,7 @@ namespace BoneworksLIV
 		public override void OnUpdate()
 		{
 			base.OnUpdate();
-			if (Input.GetKeyDown(KeyCode.L))
+			if (Input.GetKeyDown(KeyCode.F3))
 			{
 				MelonLogger.Msg("Pressed L");
 				if (livObject)

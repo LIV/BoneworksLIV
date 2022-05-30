@@ -356,8 +356,8 @@ namespace LIV.SDK.Unity
                 cameraReference.gameObject.SetActive(false);
             }
 
-            GameObject cloneGO = (GameObject)Object.Instantiate(cameraReference.gameObject, _liv.stage);
-            _cameraInstance = (Camera)cloneGO.GetComponent("Camera");
+            GameObject cloneGO = Object.Instantiate(cameraReference.gameObject, _liv.stage);
+            _cameraInstance = cloneGO.GetComponent<Camera>();
 
             SDKUtils.CleanCameraBehaviours(_cameraInstance, _liv.excludeBehaviours);
 
