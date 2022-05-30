@@ -321,7 +321,8 @@ namespace LIV.SDK.Unity
             // Remove all children from camera clone.
             foreach (var child in camera.transform)
             {
-                Object.Destroy((Object)child);
+                // TODO fix object destroy
+                // Object.Destroy(child);
             }
 
             if (excludeBehaviours == null) return;

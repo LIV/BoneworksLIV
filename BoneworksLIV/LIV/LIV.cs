@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
-using Il2CppSystem.Collections;
-using System;
 
 #if UNITY_2017_2_OR_NEWER
 using UnityEngine.XR;
@@ -346,7 +344,7 @@ namespace LIV.SDK.Unity
         private string[] _excludeBehavioursCandidate = null;
 
         private bool _enabled = false;
-        private Coroutine _waitForEndOfFrameCoroutine;
+        private object _waitForEndOfFrameCoroutine;
 
         void OnEnable()
         {
@@ -366,7 +364,7 @@ namespace LIV.SDK.Unity
             UpdateSDKReady();
         }
 
-        IEnumerable<WaitForEndOfFrame> WaitForUnityEndOfFrame()
+        IEnumerator<WaitForEndOfFrame> WaitForUnityEndOfFrame()
         {
             while (Application.isPlaying && enabled)
             {
@@ -437,14 +435,14 @@ namespace LIV.SDK.Unity
         void StartRenderCoroutine()
         {
             StopRenderCoroutine();
-            _waitForEndOfFrameCoroutine = StartCoroutine(nameof(WaitForUnityEndOfFrame));
+            _waitForEndOfFrameCoroutine = MelonLoader.MelonCoroutines.Start(WaitForUnityEndOfFrame());
         }
 
         void StopRenderCoroutine()
         {
             if (_waitForEndOfFrameCoroutine != null)
             {
-                StopCoroutine(_waitForEndOfFrameCoroutine);
+                MelonLoader.MelonCoroutines.Stop(_waitForEndOfFrameCoroutine);
                 _waitForEndOfFrameCoroutine = null;
             }
         }

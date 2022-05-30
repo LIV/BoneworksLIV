@@ -34,10 +34,17 @@ namespace BoneworksLIV
 				{
 					Object.Destroy(livObject);
 				}
+
+				var cameraPrefab = new GameObject("LivCameraPrefab");
+				cameraPrefab.SetActive(false);
+				cameraPrefab.AddComponent<Camera>();
+				cameraPrefab.transform.SetParent(Camera.main.transform.parent, false);
+
 				livObject = new GameObject("LIV");
 				livObject.SetActive(false);
 				liv = livObject.AddComponent<LIV.SDK.Unity.LIV>();
-				liv.HMDCamera = Camera.main;
+				// liv.HMDCamera = Camera.main;
+				liv.MRCameraPrefab = cameraPrefab.GetComponent<Camera>();
 				liv.stage = Camera.main.transform.parent;
 				liv.fixPostEffectsAlpha = true;
 				livObject.SetActive(true);
