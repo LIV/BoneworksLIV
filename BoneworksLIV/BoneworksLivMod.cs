@@ -43,7 +43,7 @@ namespace BoneworksLIV
 				livObject = new GameObject("LIV");
 				livObject.SetActive(false);
 				liv = livObject.AddComponent<LIV.SDK.Unity.LIV>();
-				// liv.HMDCamera = Camera.main;
+				liv.HMDCamera = Camera.main;
 				liv.MRCameraPrefab = cameraPrefab.GetComponent<Camera>();
 				liv.stage = Camera.main.transform.parent;
 				liv.fixPostEffectsAlpha = true;
