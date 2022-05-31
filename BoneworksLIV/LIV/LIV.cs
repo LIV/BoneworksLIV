@@ -63,7 +63,7 @@ namespace LIV.SDK.Unity
 #endif
     public class LIV : MonoBehaviour
     {
-        // TODO Document required change. Constructor required for IL2cpp mods.
+        // TODO: Document change. Constructor required for IL2cpp mods.
         public LIV(IntPtr ptr) : base(ptr) {}
 
         /// <summary>
@@ -481,7 +481,7 @@ namespace LIV.SDK.Unity
         void StartRenderCoroutine()
         {
             StopRenderCoroutine();
-            // TODO Document change. Need to use MelonCoroutines in IL2cpp mods.
+            // TODO: Document change. Need to use MelonCoroutines in IL2cpp mods.
             _waitForEndOfFrameCoroutine = MelonLoader.MelonCoroutines.Start(WaitForUnityEndOfFrame());
         }
 
@@ -489,7 +489,7 @@ namespace LIV.SDK.Unity
         {
             if (_waitForEndOfFrameCoroutine != null)
             {
-                // TODO Document change. Need to use MelonCoroutines in IL2cpp mods.
+                // TODO: Document change. Need to use MelonCoroutines in IL2cpp mods.
                 MelonLoader.MelonCoroutines.Stop(_waitForEndOfFrameCoroutine);
                 _waitForEndOfFrameCoroutine = null;
             }

@@ -56,7 +56,7 @@ namespace LIV.SDK.Unity
 };
         static bool GetTexture(Texture2D texture)
         {            
-            // TODO LoadImage not existing (stripped by IL2cpp build?).
+            // TODO: Document change. LoadImage not existing (stripped by IL2cpp build?).
             // I just used something else but maybe that doesn't work.
             // bool output = texture.LoadImage(data);
             bool output = texture.LoadRawTextureDataImplArray(data);
