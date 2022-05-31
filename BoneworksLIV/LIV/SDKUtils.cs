@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Il2CppSystem;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace LIV.SDK.Unity
 {
@@ -319,10 +321,9 @@ namespace LIV.SDK.Unity
         public static void CleanCameraBehaviours(Camera camera, string[] excludeBehaviours)
         {
             // Remove all children from camera clone.
-            foreach (var child in camera.transform)
+            foreach (Transform child in camera.transform)
             {
-                // TODO fix object destroy
-                // Object.Destroy(child);
+                Object.Destroy(child.gameObject);
             }
 
             if (excludeBehaviours == null) return;
@@ -381,10 +382,12 @@ namespace LIV.SDK.Unity
             return true;
         }
 
-        public static bool DisposeObject<T>(ref T reference)
+        // TODO: Document change. in Il2cpp CommandBuffer doesn't inherit the Disposable interface,
+        // so I'm doing a cast instead.
+        public static bool DisposeObject<T>(ref T reference) where T : Il2CppSystem.Object
         {
             if (reference == null) return false;
-            // reference.Dispose(); TODO removed.
+            reference.Cast<IDisposable>().Dispose();
             reference = default(T);
             return true;
         }

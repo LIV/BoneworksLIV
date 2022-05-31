@@ -67,6 +67,7 @@ namespace LIV.SDK.Unity
                 }
             }
 
+            // TODO: Document change. Il2cpp mods will unload shader assets unless we change the hideFlags.
             private static Shader LoadShader(AssetBundle bundle, string name)
             {
                 var shader = bundle.LoadAsset<Shader>(name);

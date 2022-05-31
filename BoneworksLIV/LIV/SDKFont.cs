@@ -56,7 +56,10 @@ namespace LIV.SDK.Unity
 };
         static bool GetTexture(Texture2D texture)
         {            
-            bool output = texture.LoadRawTextureDataImplArray(data); // TODO This LIV line was changed.
+            // TODO LoadImage not existing (stripped by IL2cpp build?).
+            // I just used something else but maybe that doesn't work.
+            // bool output = texture.LoadImage(data);
+            bool output = texture.LoadRawTextureDataImplArray(data);
             texture.wrapMode = TextureWrapMode.Clamp;
             texture.filterMode = FilterMode.Point;
             return output;

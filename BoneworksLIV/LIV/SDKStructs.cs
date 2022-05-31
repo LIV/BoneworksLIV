@@ -354,9 +354,10 @@ w: {w}";
             };
         }
 
+        // TODO: Document change. Mathf.Deg2Rad and Methf.PI were stripped by IL2cpp so I hardcoded it here.
+        private static float deg2Rad = (3.14159265358979f * 2f) / 360f;
         public static SDKMatrix4x4 Perspective(float vFov, float aspect, float zNear, float zFar)
         {
-            float deg2Rad = (3.14159265358979f * 2f) / 360f;
             float vFovRad = vFov * deg2Rad;
             float hFovRad = 2.0f * Mathf.Atan(Mathf.Tan(vFovRad * 0.5f) * aspect);
             float w = 1.0f / Mathf.Tan(hFovRad * 0.5f);

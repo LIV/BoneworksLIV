@@ -1,6 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.Serialization;
+using System.Collections;
+using System;
 
 #if UNITY_2017_2_OR_NEWER
 using UnityEngine.XR;
@@ -31,10 +32,10 @@ namespace LIV.SDK.Unity
     /// <code>
     /// public class StartFromScriptExample : MonoBehaviour
     /// {
-    ///     Camera _hmdCamera;
-    ///     Transform _stage;
-    ///     Transform _stageTransform;
-    ///     Camera _mrCameraPrefab;
+    ///     [SerializeField] Camera _hmdCamera;
+    ///     [SerializeField] Transform _stage;
+    ///     [SerializeField] Transform _stageTransform;
+    ///     [SerializeField] Camera _mrCameraPrefab;
 
     ///     LIV.SDK.Unity.LIV _liv;
 
@@ -56,8 +57,13 @@ namespace LIV.SDK.Unity
     /// }
     /// </code>
     /// </example>
+#if UNITY_EDITOR
+    [HelpURL("https://liv.tv/sdk-unity-docs")]
+    [AddComponentMenu("LIV/LIV")]
+#endif
     public class LIV : MonoBehaviour
     {
+        // TODO Document required change. Constructor required for IL2cpp mods.
         public LIV(IntPtr ptr) : base(ptr) {}
 
         /// <summary>
@@ -93,6 +99,11 @@ namespace LIV.SDK.Unity
         /// </summary>
         public System.Action onDeactivate = null;
 
+#if UNITY_EDITOR
+        [Tooltip("This is the topmost transform of your VR rig.")]
+        [FormerlySerializedAs("TrackedSpaceOrigin")]
+        [SerializeField]
+#endif
         Transform _stage = null;
         /// <summary>
         /// This is the topmost transform of your VR rig.
@@ -120,6 +131,7 @@ namespace LIV.SDK.Unity
             }
         }
 
+        [Obsolete("Use stage instead")]
         public Transform trackedSpaceOrigin {
             get {
                 return stage;
@@ -141,6 +153,11 @@ namespace LIV.SDK.Unity
             }
         }
 
+#if UNITY_EDITOR
+        [Tooltip("This transform is an additional wrapper to the user’s playspace.")]
+        [FormerlySerializedAs("StageTransform")]
+        [SerializeField] 
+#endif
         Transform _stageTransform = null;
         /// <summary>
         /// This transform is an additional wrapper to the user’s playspace.
@@ -158,6 +175,11 @@ namespace LIV.SDK.Unity
             }
         }
 
+#if UNITY_EDITOR
+        [Tooltip("This is the camera responsible for rendering the user’s HMD.")]
+        [FormerlySerializedAs("HMDCamera")]
+        [SerializeField]
+#endif
         Camera _HMDCamera = null;
         /// <summary>
         /// This is the camera responsible for rendering the user’s HMD.
@@ -184,6 +206,11 @@ namespace LIV.SDK.Unity
             }
         }
 
+#if UNITY_EDITOR
+        [Tooltip("Camera prefab for customized rendering.")]
+        [FormerlySerializedAs("MRCameraPrefab")]
+        [SerializeField]
+#endif
         Camera _MRCameraPrefab = null;
         /// <summary>
         /// Camera prefab for customized rendering.
@@ -207,6 +234,11 @@ namespace LIV.SDK.Unity
             }
         }
 
+#if UNITY_EDITOR
+        [Tooltip("This option disables all standard Unity assets for the Mixed Reality rendering.")]
+        [FormerlySerializedAs("DisableStandardAssets")]
+        [SerializeField]
+#endif
         bool _disableStandardAssets = false;
         /// <summary>
         /// This option disables all standard Unity assets for the Mixed Reality rendering.
@@ -223,6 +255,11 @@ namespace LIV.SDK.Unity
             }
         }
 
+#if UNITY_EDITOR
+        [Tooltip("The layer mask defines exactly which object layers should be rendered in MR.")]
+        [FormerlySerializedAs("SpectatorLayerMask")]
+        [SerializeField] 
+#endif
         LayerMask _spectatorLayerMask = ~0;
         /// <summary>
         /// The layer mask defines exactly which object layers should be rendered in MR.
@@ -243,7 +280,12 @@ namespace LIV.SDK.Unity
             }
         }
 
-                string[] _excludeBehaviours = new string[] {
+#if UNITY_EDITOR
+        [Tooltip("This is for removing unwanted scripts from the cloned MR camera.")]
+        [FormerlySerializedAs("ExcludeBehaviours")]
+        [SerializeField]
+#endif
+        string[] _excludeBehaviours = new string[] {
             "AudioListener",
             "Collider",
             "SteamVR_Camera",
@@ -274,8 +316,12 @@ namespace LIV.SDK.Unity
         /// <summary>
         /// Recovers corrupted alpha channel when using post-effects.
         /// </summary>
-        /// 
-                private bool _fixPostEffectsAlpha = false;
+#if UNITY_EDITOR
+        [Tooltip("Recovers corrupted alpha channel when using post-effects.")]
+        [FormerlySerializedAs("FixPostEffectsAlpha")]
+        [SerializeField]
+#endif
+        private bool _fixPostEffectsAlpha = false;
         public bool fixPostEffectsAlpha {
             get {
                 return _fixPostEffectsAlpha;
@@ -364,7 +410,7 @@ namespace LIV.SDK.Unity
             UpdateSDKReady();
         }
 
-        IEnumerator<WaitForEndOfFrame> WaitForUnityEndOfFrame()
+        IEnumerator WaitForUnityEndOfFrame()
         {
             while (Application.isPlaying && enabled)
             {
@@ -435,6 +481,7 @@ namespace LIV.SDK.Unity
         void StartRenderCoroutine()
         {
             StopRenderCoroutine();
+            // TODO Document change. Need to use MelonCoroutines in IL2cpp mods.
             _waitForEndOfFrameCoroutine = MelonLoader.MelonCoroutines.Start(WaitForUnityEndOfFrame());
         }
 
@@ -442,6 +489,7 @@ namespace LIV.SDK.Unity
         {
             if (_waitForEndOfFrameCoroutine != null)
             {
+                // TODO Document change. Need to use MelonCoroutines in IL2cpp mods.
                 MelonLoader.MelonCoroutines.Stop(_waitForEndOfFrameCoroutine);
                 _waitForEndOfFrameCoroutine = null;
             }

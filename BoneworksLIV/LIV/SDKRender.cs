@@ -356,6 +356,9 @@ namespace LIV.SDK.Unity
                 cameraReference.gameObject.SetActive(false);
             }
 
+            // TODO: Document change. Il2cpp mod will give "invalid cast" errors.
+            // GameObject cloneGO = (GameObject)Object.Instantiate(cameraReference.gameObject, _liv.stage);
+            // _cameraInstance = (Camera)cloneGO.GetComponent("Camera");
             GameObject cloneGO = Object.Instantiate(cameraReference.gameObject, _liv.stage);
             _cameraInstance = cloneGO.GetComponent<Camera>();
 
