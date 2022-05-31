@@ -382,8 +382,8 @@ namespace LIV.SDK.Unity
             return true;
         }
 
-        // TODO: Document change. in Il2cpp CommandBuffer doesn't inherit the Disposable interface,
-        // so I'm doing a cast instead.
+        // TODO: Document change. in Il2cpp mods Object doesn't inherit the Disposable interface,
+        // so I'm doing a cast instead. Might be broken, dunno.
         public static bool DisposeObject<T>(ref T reference) where T : Il2CppSystem.Object
         {
             if (reference == null) return false;
