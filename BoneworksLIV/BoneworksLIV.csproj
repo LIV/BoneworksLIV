@@ -380,6 +380,13 @@
         <Compile Include="LIV\SDKUtils.cs" />
         <Compile Include="Patches.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
+        <Compile Include="Volcap\ReflectionUtility.cs" />
+        <Compile Include="Volcap\VolumetricCapture\Pathfinder\SDKBridgeVolcap.cs" />
+        <Compile Include="Volcap\VolumetricCapture\SDKVolumetricBridge.cs" />
+        <Compile Include="Volcap\VolumetricCapture\SDKVolumetricRenderer.cs" />
+        <Compile Include="Volcap\VolumetricCapture\SDKVolumetricStructs.cs" />
+        <Compile Include="Volcap\VolumetricCapture\SDKVolumetricUtils.cs" />
+        <Compile Include="Volcap\VolumetricCapture\VolumetricCapture.cs" />
     </ItemGroup>
     <ItemGroup>
       <EmbeddedResource Include="..\BoneworksLivUnity\AssetBundles\liv-shaders">

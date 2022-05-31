@@ -7,18 +7,8 @@ using System;
 using UnityEngine.XR;
 #endif
 
-namespace LIV.SDK.Unity
+namespace LIV.SDK.Unity.Volumetric
 {
-    [System.Flags]
-    public enum INVALIDATION_FLAGS : uint
-    {
-        NONE = 0,
-        HMD_CAMERA = 1,
-        STAGE = 2,
-        MR_CAMERA_PREFAB = 4,
-        EXCLUDE_BEHAVIOURS = 8
-    }
-
     /// <summary>
     /// The LIV SDK provides a spectator view of your application. 
     /// </summary>
@@ -32,20 +22,24 @@ namespace LIV.SDK.Unity
     /// <code>
     /// public class StartFromScriptExample : MonoBehaviour
     /// {
-    ///     [SerializeField] Camera _hmdCamera;
-    ///     [SerializeField] Transform _stage;
-    ///     [SerializeField] Transform _stageTransform;
-    ///     [SerializeField] Camera _mrCameraPrefab;
+    // ///     [SerializeField]
+    // Camera _hmdCamera;
+    // ///     [SerializeField]
+    // Transform _stage;
+    // ///     [SerializeField]
+    // Transform _stageTransform;
+    // ///     [SerializeField]
+    // Camera _cameraPrefab;
 
-    ///     LIV.SDK.Unity.LIV _liv;
+    ///     LIV.SDK.Unity.Volumetric.VolumetricCapture _liv;
 
     ///     private void OnEnable()
     ///     {
-    ///         _liv = gameObject.AddComponent<LIV.SDK.Unity.LIV>();
+    ///         _liv = gameObject.AddComponent<LIV.SDK.Unity.Volumetric.VolumetricCapture>();
     ///         _liv.HMDCamera = _hmdCamera;
     ///         _liv.stage = _stage;
     ///         _liv.stageTransform = _stageTransform;
-    ///         _liv.MRCameraPrefab = _mrCameraPrefab;
+    ///         _liv.cameraPrefab = _cameraPrefab;
     ///     }
 
     ///     private void OnDisable()
@@ -57,14 +51,22 @@ namespace LIV.SDK.Unity
     /// }
     /// </code>
     /// </example>
-#if UNITY_EDITOR
-    [HelpURL("https://liv.tv/sdk-unity-docs")]
-    [AddComponentMenu("LIV/LIV")]
-#endif
-    public class LIV : MonoBehaviour
+    // [HelpURL("https://liv.tv/sdk-unity-docs")]
+    // [AddComponentMenu("LIV/Volumetric Capture")]
+    public class VolumetricCapture : MonoBehaviour
     {
         // TODO: Document change. Constructor required for IL2cpp mods.
-        public LIV(IntPtr ptr) : base(ptr) {}
+        public VolumetricCapture(IntPtr ptr) : base(ptr) {}
+
+        [System.Flags]
+        public enum INVALIDATION_FLAGS : uint
+        {
+            NONE = 0,
+            HMD_CAMERA = 1,
+            STAGE = 2,
+            CAMERA_PREFAB = 4,
+            EXCLUDE_BEHAVIOURS = 8
+        }
 
         /// <summary>
         /// triggered when the LIV SDK is activated by the LIV App and enabled by the game.
@@ -73,37 +75,19 @@ namespace LIV.SDK.Unity
         /// <summary>
         /// triggered before the Mixed Reality camera is about to render.
         /// </summary>
-        public System.Action<SDKRender> onPreRender = null;             
-        /// <summary>
-        /// triggered before the LIV SDK starts rendering background image.
-        /// </summary>
-        public System.Action<SDKRender> onPreRenderBackground = null;
-        /// <summary>
-        /// triggered after the LIV SDK starts rendering background image.
-        /// </summary>
-        public System.Action<SDKRender> onPostRenderBackground = null;
-        /// <summary>
-        /// triggered before the LIV SDK starts rendering the foreground image.
-        /// </summary>
-        public System.Action<SDKRender> onPreRenderForeground = null;
-        /// <summary>
-        /// triggered after the LIV SDK starts rendering the foreground image.
-        /// </summary>
-        public System.Action<SDKRender> onPostRenderForeground = null;
+        public System.Action<SDKVolumetricRenderer> onPreRender = null;
         /// <summary>
         /// triggered after the Mixed Reality camera has finished rendering.
         /// </summary>
-        public System.Action<SDKRender> onPostRender = null;
+        public System.Action<SDKVolumetricRenderer> onPostRender = null;
         /// <summary>
         /// triggered when the LIV SDK is deactivated by the LIV App or disabled by the game.
         /// </summary>
         public System.Action onDeactivate = null;
 
-#if UNITY_EDITOR
-        [Tooltip("This is the topmost transform of your VR rig.")]
-        [FormerlySerializedAs("TrackedSpaceOrigin")]
-        [SerializeField]
-#endif
+        // // [Tooltip("This is the topmost transform of your VR rig.")]
+        // [FormerlySerializedAs("TrackedSpaceOrigin")]
+        // [SerializeField]
         Transform _stage = null;
         /// <summary>
         /// This is the topmost transform of your VR rig.
@@ -120,13 +104,13 @@ namespace LIV.SDK.Unity
             set {
                 if (value == null)
                 {
-                    Debug.LogWarning("LIV: Stage cannot be null!");
+                    Debug.LogWarning("LIV VolumetricCapture: Stage cannot be null!");
                 }
 
                 if (_stage != value)
                 {
                     _stageCandidate = value;
-                    _invalidate = (INVALIDATION_FLAGS)SDKUtils.SetFlag((uint)_invalidate, (uint)INVALIDATION_FLAGS.STAGE, true);
+                    _invalidate = (INVALIDATION_FLAGS)SDKVolumetricUtils.SetFlag((uint)_invalidate, (uint)INVALIDATION_FLAGS.STAGE, true);
                 }
             }
         }
@@ -153,11 +137,9 @@ namespace LIV.SDK.Unity
             }
         }
 
-#if UNITY_EDITOR
-        [Tooltip("This transform is an additional wrapper to the user’s playspace.")]
-        [FormerlySerializedAs("StageTransform")]
-        [SerializeField] 
-#endif
+        // [Tooltip("This transform is an additional wrapper to the user’s playspace.")]
+        // [FormerlySerializedAs("StageTransform")]
+        // [SerializeField]
         Transform _stageTransform = null;
         /// <summary>
         /// This transform is an additional wrapper to the user’s playspace.
@@ -175,11 +157,9 @@ namespace LIV.SDK.Unity
             }
         }
 
-#if UNITY_EDITOR
-        [Tooltip("This is the camera responsible for rendering the user’s HMD.")]
-        [FormerlySerializedAs("HMDCamera")]
-        [SerializeField]
-#endif
+        // [Tooltip("This is the camera responsible for rendering the user’s HMD.")]
+        // [FormerlySerializedAs("HMDCamera")]
+        // [SerializeField]
         Camera _HMDCamera = null;
         /// <summary>
         /// This is the camera responsible for rendering the user’s HMD.
@@ -195,23 +175,20 @@ namespace LIV.SDK.Unity
             set {
                 if (value == null)
                 {
-                    Debug.LogWarning("LIV: HMD Camera cannot be null!");
+                    Debug.LogWarning("LIV VolumetricCapture: HMD Camera cannot be null!");
                 }
 
                 if (_HMDCamera != value)
                 {
                     _HMDCameraCandidate = value;
-                    _invalidate = (INVALIDATION_FLAGS)SDKUtils.SetFlag((uint)_invalidate, (uint)INVALIDATION_FLAGS.HMD_CAMERA, true);
+                    _invalidate = (INVALIDATION_FLAGS)SDKVolumetricUtils.SetFlag((uint)_invalidate, (uint)INVALIDATION_FLAGS.HMD_CAMERA, true);
                 }
             }
         }
 
-#if UNITY_EDITOR
-        [Tooltip("Camera prefab for customized rendering.")]
-        [FormerlySerializedAs("MRCameraPrefab")]
-        [SerializeField]
-#endif
-        Camera _MRCameraPrefab = null;
+        // [Tooltip("Camera prefab for customized rendering.")]
+        // [SerializeField]
+        Camera _cameraPrefab = null;
         /// <summary>
         /// Camera prefab for customized rendering.
         /// </summary>
@@ -221,24 +198,22 @@ namespace LIV.SDK.Unity
         /// <para>However, some games can experience issues because of custom MonoBehaviours attached to this camera.</para>
         /// <para>You can use a custom camera prefab for those cases.</para>
         /// </remarks>
-        public Camera MRCameraPrefab {
+        public Camera cameraPrefab {
             get {
-                return _MRCameraPrefab;
+                return _cameraPrefab;
             }
             set {
-                if (_MRCameraPrefab != value)
+                if (_cameraPrefab != value)
                 {
-                    _MRCameraPrefabCandidate = value;
-                    _invalidate = (INVALIDATION_FLAGS)SDKUtils.SetFlag((uint)_invalidate, (uint)INVALIDATION_FLAGS.MR_CAMERA_PREFAB, true);
+                    _cameraPrefabCandidate = value;
+                    _invalidate = (INVALIDATION_FLAGS)SDKVolumetricUtils.SetFlag((uint)_invalidate, (uint)INVALIDATION_FLAGS.CAMERA_PREFAB, true);
                 }
             }
         }
 
-#if UNITY_EDITOR
-        [Tooltip("This option disables all standard Unity assets for the Mixed Reality rendering.")]
-        [FormerlySerializedAs("DisableStandardAssets")]
-        [SerializeField]
-#endif
+        // [Tooltip("This option disables all standard Unity assets for the Mixed Reality rendering.")]
+        // [FormerlySerializedAs("DisableStandardAssets")]
+        // [SerializeField]
         bool _disableStandardAssets = false;
         /// <summary>
         /// This option disables all standard Unity assets for the Mixed Reality rendering.
@@ -255,11 +230,9 @@ namespace LIV.SDK.Unity
             }
         }
 
-#if UNITY_EDITOR
-        [Tooltip("The layer mask defines exactly which object layers should be rendered in MR.")]
-        [FormerlySerializedAs("SpectatorLayerMask")]
-        [SerializeField] 
-#endif
+        // [Tooltip("The layer mask defines exactly which object layers should be rendered in MR.")]
+        // [FormerlySerializedAs("SpectatorLayerMask")]
+        // [SerializeField]
         LayerMask _spectatorLayerMask = ~0;
         /// <summary>
         /// The layer mask defines exactly which object layers should be rendered in MR.
@@ -280,11 +253,9 @@ namespace LIV.SDK.Unity
             }
         }
 
-#if UNITY_EDITOR
-        [Tooltip("This is for removing unwanted scripts from the cloned MR camera.")]
-        [FormerlySerializedAs("ExcludeBehaviours")]
-        [SerializeField]
-#endif
+        // [Tooltip("This is for removing unwanted scripts from the cloned MR camera.")]
+        // [FormerlySerializedAs("ExcludeBehaviours")]
+        // [SerializeField]
         string[] _excludeBehaviours = new string[] {
             "AudioListener",
             "Collider",
@@ -307,27 +278,8 @@ namespace LIV.SDK.Unity
                 if (_excludeBehaviours != value)
                 {
                     _excludeBehavioursCandidate = value;
-                    _invalidate = (INVALIDATION_FLAGS)SDKUtils.SetFlag((uint)_invalidate, (uint)INVALIDATION_FLAGS.EXCLUDE_BEHAVIOURS, true);
+                    _invalidate = (INVALIDATION_FLAGS)SDKVolumetricUtils.SetFlag((uint)_invalidate, (uint)INVALIDATION_FLAGS.EXCLUDE_BEHAVIOURS, true);
                 }
-            }
-        }
-
-
-        /// <summary>
-        /// Recovers corrupted alpha channel when using post-effects.
-        /// </summary>
-#if UNITY_EDITOR
-        [Tooltip("Recovers corrupted alpha channel when using post-effects.")]
-        [FormerlySerializedAs("FixPostEffectsAlpha")]
-        [SerializeField]
-#endif
-        private bool _fixPostEffectsAlpha = false;
-        public bool fixPostEffectsAlpha {
-            get {
-                return _fixPostEffectsAlpha;
-            }
-            set {
-                _fixPostEffectsAlpha = value;
             }
         }
 
@@ -340,18 +292,18 @@ namespace LIV.SDK.Unity
 
                 if (_HMDCamera == null)
                 {
-                    Debug.LogError("LIV: HMD Camera is a required parameter!");
+                    Debug.LogError("LIV VolumetricCapture: HMD Camera is a required parameter!");
                     return false;
                 }
 
                 if (_stage == null)
                 {
-                    Debug.LogWarning("LIV: Tracked space origin should be assigned!");
+                    Debug.LogWarning("LIV VolumetricCapture: Tracked space origin should be assigned!");
                 }
 
                 if (_spectatorLayerMask == 0)
                 {
-                    Debug.LogWarning("LIV: The spectator layer mask is set to not show anything. Is this correct?");
+                    Debug.LogWarning("LIV VolumetricCapture: The spectator layer mask is set to not show anything. Is this correct?");
                 }
 
                 return true;
@@ -370,23 +322,23 @@ namespace LIV.SDK.Unity
 
         private bool _isReady {
             get {
-                return isValid && _enabled && SDKBridge.IsActive;
+                return isValid && _enabled;
             }
         }
 
-        private SDKRender _render = null;
+        private SDKVolumetricRenderer _volumetricRenderer = null;
 
         /// <summary>
-        /// Script responsible for the MR rendering.
+        /// Script responsible for the volumetric rendering.
         /// </summary>
-        // private SDKRender render { get { return _render; } }
+        public SDKVolumetricRenderer volumetricRenderer { get { return _volumetricRenderer; } }
 
         private bool _wasReady = false;
 
         private INVALIDATION_FLAGS _invalidate = INVALIDATION_FLAGS.NONE;
         private Transform _stageCandidate = null;
         private Camera _HMDCameraCandidate = null;
-        private Camera _MRCameraPrefabCandidate = null;
+        private Camera _cameraPrefabCandidate = null;
         private string[] _excludeBehavioursCandidate = null;
 
         private bool _enabled = false;
@@ -417,7 +369,7 @@ namespace LIV.SDK.Unity
                 yield return new WaitForEndOfFrame();
                 if (isActive)
                 {
-                    _render.Render();
+                    _volumetricRenderer.Render();
                 }
             }
         }
@@ -446,8 +398,7 @@ namespace LIV.SDK.Unity
 
         void OnSDKActivate()
         {
-            Debug.Log("LIV: Compositor connected, setting up Mixed Reality!");
-            SubmitSDKOutput();
+            Debug.Log("LIV VolumetricCapture: Compositor connected, setting up Volumetric Capture!");
             CreateAssets();
             StartRenderCoroutine();
             _isActive = true;
@@ -456,7 +407,7 @@ namespace LIV.SDK.Unity
 
         void OnSDKDeactivate()
         {
-            Debug.Log("LIV: Compositor disconnected, cleaning up Mixed Reality.");            
+            Debug.Log("LIV VolumetricCapture: Compositor disconnected, cleaning up Volumetric Capture.");            
             if (onDeactivate != null) onDeactivate.Invoke();            
             StopRenderCoroutine();
             DestroyAssets();
@@ -466,22 +417,21 @@ namespace LIV.SDK.Unity
         void CreateAssets()
         {
             DestroyAssets();
-            _render = new SDKRender(this);
+            _volumetricRenderer = new SDKVolumetricRenderer(this);
         }
 
         void DestroyAssets()
         {
-            if (_render != null)
+            if (_volumetricRenderer != null)
             {
-                _render.Dispose();
-                _render = null;
+                _volumetricRenderer.Dispose();
+                _volumetricRenderer = null;
             }
         }
 
         void StartRenderCoroutine()
         {
             StopRenderCoroutine();
-            // TODO: Document change. Need to use MelonCoroutines in IL2cpp mods.
             _waitForEndOfFrameCoroutine = MelonLoader.MelonCoroutines.Start(WaitForUnityEndOfFrame());
         }
 
@@ -489,61 +439,39 @@ namespace LIV.SDK.Unity
         {
             if (_waitForEndOfFrameCoroutine != null)
             {
-                // TODO: Document change. Need to use MelonCoroutines in IL2cpp mods.
                 MelonLoader.MelonCoroutines.Stop(_waitForEndOfFrameCoroutine);
                 _waitForEndOfFrameCoroutine = null;
             }
         }
 
-        void SubmitSDKOutput()
-        {
-            SDKApplicationOutput output = SDKApplicationOutput.empty;
-            output.supportedFeatures = FEATURES.BACKGROUND_RENDER |
-                                        FEATURES.FOREGROUND_RENDER |
-                                        FEATURES.OVERRIDE_POST_PROCESSING |
-                                        FEATURES.FIX_FOREGROUND_ALPHA;
-
-            output.sdkID = SDKConstants.SDK_ID;
-            output.sdkVersion = SDKConstants.SDK_VERSION;
-            output.engineName = SDKConstants.ENGINE_NAME;
-            output.engineVersion = Application.unityVersion;
-            output.applicationName = Application.productName;
-            output.applicationVersion = Application.version;
-            output.graphicsAPI = SystemInfo.graphicsDeviceType.ToString();
-#if UNITY_2017_2_OR_NEWER
-            output.xrDeviceName = XRSettings.loadedDeviceName;
-#endif
-            SDKBridge.SubmitApplicationOutput(output);
-        }
-
         void Invalidate()
         {
-            if (SDKUtils.ContainsFlag((uint)_invalidate, (uint)INVALIDATION_FLAGS.STAGE))
+            if (SDKVolumetricUtils.ContainsFlag((uint)_invalidate, (uint)INVALIDATION_FLAGS.STAGE))
             {
                 _stage = _stageCandidate;
                 _stageCandidate = null;
-                _invalidate = (INVALIDATION_FLAGS)SDKUtils.SetFlag((uint)_invalidate, (uint)INVALIDATION_FLAGS.STAGE, false);
+                _invalidate = (INVALIDATION_FLAGS)SDKVolumetricUtils.SetFlag((uint)_invalidate, (uint)INVALIDATION_FLAGS.STAGE, false);
             }
 
-            if (SDKUtils.ContainsFlag((uint)_invalidate, (uint)INVALIDATION_FLAGS.HMD_CAMERA))
+            if (SDKVolumetricUtils.ContainsFlag((uint)_invalidate, (uint)INVALIDATION_FLAGS.HMD_CAMERA))
             {
                 _HMDCamera = _HMDCameraCandidate;
                 _HMDCameraCandidate = null;
-                _invalidate = (INVALIDATION_FLAGS)SDKUtils.SetFlag((uint)_invalidate, (uint)INVALIDATION_FLAGS.HMD_CAMERA, false);
+                _invalidate = (INVALIDATION_FLAGS)SDKVolumetricUtils.SetFlag((uint)_invalidate, (uint)INVALIDATION_FLAGS.HMD_CAMERA, false);
             }
 
-            if (SDKUtils.ContainsFlag((uint)_invalidate, (uint)INVALIDATION_FLAGS.MR_CAMERA_PREFAB))
+            if (SDKVolumetricUtils.ContainsFlag((uint)_invalidate, (uint)INVALIDATION_FLAGS.CAMERA_PREFAB))
             {
-                _MRCameraPrefab = _MRCameraPrefabCandidate;
-                _MRCameraPrefabCandidate = null;
-                _invalidate = (INVALIDATION_FLAGS)SDKUtils.SetFlag((uint)_invalidate, (uint)INVALIDATION_FLAGS.MR_CAMERA_PREFAB, false);
+                _cameraPrefab = _cameraPrefabCandidate;
+                _cameraPrefabCandidate = null;
+                _invalidate = (INVALIDATION_FLAGS)SDKVolumetricUtils.SetFlag((uint)_invalidate, (uint)INVALIDATION_FLAGS.CAMERA_PREFAB, false);
             }
 
-            if (SDKUtils.ContainsFlag((uint)_invalidate, (uint)INVALIDATION_FLAGS.EXCLUDE_BEHAVIOURS))
+            if (SDKVolumetricUtils.ContainsFlag((uint)_invalidate, (uint)INVALIDATION_FLAGS.EXCLUDE_BEHAVIOURS))
             {
                 _excludeBehaviours = _excludeBehavioursCandidate;
                 _excludeBehavioursCandidate = null;
-                _invalidate = (INVALIDATION_FLAGS)SDKUtils.SetFlag((uint)_invalidate, (uint)INVALIDATION_FLAGS.EXCLUDE_BEHAVIOURS, false);
+                _invalidate = (INVALIDATION_FLAGS)SDKVolumetricUtils.SetFlag((uint)_invalidate, (uint)INVALIDATION_FLAGS.EXCLUDE_BEHAVIOURS, false);
             }
         }
     }
