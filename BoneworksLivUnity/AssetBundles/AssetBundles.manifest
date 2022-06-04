@@ -1,7 +1,10 @@
 ManifestFileVersion: 0
-CRC: 2951721327
+CRC: 2247994697
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
       Name: liv-shaders
+      Dependencies: {}
+    Info_1:
+      Name: stencil-mask
       Dependencies: {}

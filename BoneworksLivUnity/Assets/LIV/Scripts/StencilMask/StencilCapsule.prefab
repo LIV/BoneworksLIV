@@ -102,7 +102,6 @@ GameObject:
   - component: {fileID: 4287812818266369623}
   - component: {fileID: 7294412912338558859}
   - component: {fileID: 4989468389197478262}
-  - component: {fileID: 4503776418832628374}
   m_Layer: 0
   m_Name: StencilCapsule
   m_TagString: Untagged
@@ -170,17 +169,3 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!136 &4503776418832628374
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7407134699489131298}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}

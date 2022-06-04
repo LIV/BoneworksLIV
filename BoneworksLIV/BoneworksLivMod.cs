@@ -54,16 +54,32 @@ namespace BoneworksLIV
 				liv.MRCameraPrefab = cameraPrefab.GetComponent<Camera>();
 				liv.stage = Camera.main.transform.parent;
 				liv.fixPostEffectsAlpha = true;
-				liv.spectatorLayerMask = Camera.main.cullingMask & ~(1 << LayerMask.NameToLayer("Player"));
+				liv.spectatorLayerMask = Camera.main.cullingMask & ~(1 << LayerMask.NameToLayer("Player")) | (1 << 31);
 				livObject.SetActive(true);
 
-				var skeletonRig = GameObject.FindObjectOfType<GameWorldSkeletonRig>();
+				var skeletonRig = Object.FindObjectOfType<GameWorldSkeletonRig>();
+
+				var stencilMaskBundle = AssetManager.LoadBundle("stencil-mask");
+				var stencilMaskShader = stencilMaskBundle.LoadAsset<Shader>("StencilStandard");
+				stencilMaskShader.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+
 				var renderers = skeletonRig.gameObject.GetComponentsInChildren<Renderer>();
 				foreach (var renderer in renderers)
 				{
-					renderer.gameObject.layer = LayerMask.NameToLayer("Player");
+					// renderer.gameObject.layer = LayerMask.NameToLayer("Player");
+					foreach (var material in renderer.materials)
+					{
+						MelonLogger.Msg($"Replacing shader {material.shader.name}");
+						material.shader = stencilMaskShader;
+					}
 				}
-
+				
+				var stencilMaskCapsulePrefab = stencilMaskBundle.LoadAsset<GameObject>("StencilCapsule");
+				var stencilMaskCapsule = Object.Instantiate(stencilMaskCapsulePrefab, skeletonRig.transform, false);
+				stencilMaskCapsule.layer = 31; // 31 is visible to liv but not player.
+				Object.Destroy(stencilMaskCapsule.GetComponent<Collider>());
+				stencilMaskCapsule.hideFlags |= HideFlags.DontUnloadUnusedAsset;
+				
 				spawnedCamera = GetSpawnedCamera();
 			}
 
