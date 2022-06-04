@@ -2,6 +2,7 @@
 using LIV.SDK.Unity;
 using LIV.SDK.Unity.Volumetric;
 using MelonLoader;
+using StressLevelZero.Rig;
 using UnhollowerBaseLib.Runtime;
 using UnhollowerRuntimeLib;
 using UnityEngine;
@@ -51,7 +52,15 @@ namespace BoneworksLIV
 				liv.MRCameraPrefab = cameraPrefab.GetComponent<Camera>();
 				liv.stage = Camera.main.transform.parent;
 				liv.fixPostEffectsAlpha = true;
+				liv.spectatorLayerMask = Camera.main.cullingMask & ~(1 << LayerMask.NameToLayer("Player"));
 				livObject.SetActive(true);
+
+				var skeletonRig = GameObject.FindObjectOfType<GameWorldSkeletonRig>();
+				var renderers = skeletonRig.gameObject.GetComponentsInChildren<Renderer>();
+				foreach (var renderer in renderers)
+				{
+					renderer.gameObject.layer = LayerMask.NameToLayer("Player");
+				}
 			}
 
 			if (Input.GetKeyDown(KeyCode.F4))
