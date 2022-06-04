@@ -2,6 +2,7 @@
 using LIV.SDK.Unity;
 using LIV.SDK.Unity.Volumetric;
 using MelonLoader;
+using StressLevelZero.Pool;
 using StressLevelZero.Rig;
 using UnhollowerBaseLib.Runtime;
 using UnhollowerRuntimeLib;
@@ -28,6 +29,7 @@ namespace BoneworksLIV
 		private GameObject livObject;
 		private VolumetricCapture volCap;
 		private GameObject volCapObject;
+		private Camera spawnedCamera;
 
 		public override void OnUpdate()
 		{
@@ -61,6 +63,14 @@ namespace BoneworksLIV
 				{
 					renderer.gameObject.layer = LayerMask.NameToLayer("Player");
 				}
+
+				spawnedCamera = GetSpawnedCamera();
+			}
+
+			if (liv != null && liv.render != null && spawnedCamera != null)
+			{
+				var cameraTransform = spawnedCamera.transform;
+				liv.render.SetPose(cameraTransform.position, cameraTransform.rotation, spawnedCamera.fieldOfView);
 			}
 
 			if (Input.GetKeyDown(KeyCode.F4))
@@ -83,6 +93,23 @@ namespace BoneworksLIV
 				volCap.stage = Camera.main.transform.parent;
 				volCapObject.SetActive(true);
 			}
+		}
+
+		private Camera GetSpawnedCamera()
+		{
+			var pools = PoolManager._instance.GetComponentsInChildren<Pool>();
+			foreach (var pool in pools)
+			{
+				foreach (var spawnedObject in pool._spawnedObjects)
+				{
+					var camera = spawnedObject.GetComponentInChildren<Camera>();
+					if (camera)
+					{
+						return camera;
+					}
+				}
+			}
+			return null;
 		}
 	}
 }

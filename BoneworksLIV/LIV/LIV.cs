@@ -375,6 +375,7 @@ namespace LIV.SDK.Unity
         }
 
         private SDKRender _render = null;
+        public SDKRender render => this._render;
 
         /// <summary>
         /// Script responsible for the MR rendering.
