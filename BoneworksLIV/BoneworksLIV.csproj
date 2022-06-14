@@ -86,9 +86,11 @@
         </Reference>
         <Reference Include="SteamVR">
           <HintPath>..\..\..\AppData\Roaming\r2modmanPlus-local\BONEWORKS\profiles\Default\MelonLoader\Managed\SteamVR.dll</HintPath>
+          <Private>False</Private>
         </Reference>
         <Reference Include="SteamVR_Actions">
           <HintPath>..\..\..\AppData\Roaming\r2modmanPlus-local\BONEWORKS\profiles\Default\MelonLoader\Managed\SteamVR_Actions.dll</HintPath>
+          <Private>False</Private>
         </Reference>
         <Reference Include="System" />
         <Reference Include="System.Core" />
