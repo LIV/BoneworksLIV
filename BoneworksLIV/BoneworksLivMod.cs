@@ -13,7 +13,7 @@ namespace BoneworksLIV
 		public static Action<Camera> PlayerReady;
 		private GameObject livObject;
 		private Camera spawnedCamera;
-		private LIV.SDK.Unity.LIV livInstance => LIV.SDK.Unity.LIV.Instance;
+		private static LIV.SDK.Unity.LIV livInstance => LIV.SDK.Unity.LIV.Instance;
 
 		public override void OnApplicationStart()
 		{
@@ -29,18 +29,26 @@ namespace BoneworksLIV
 			base.OnUpdate();
 			if (Input.GetKeyDown(KeyCode.F3))
 			{
-				SetUpLiv(Camera.main);
+				SetUpSpawnedCamera();
 			}
 
-			// TODO: Allow using spectator camera mods to control the LIV camera. Disabling for now.
-			// UpdateSpectatorCameras();
+			UpdateFollowSpawnedCamera();
 		}
 
-		private void UpdateSpectatorCameras()
+		private void UpdateFollowSpawnedCamera()
 		{
-			if (livInstance == null || livInstance.render == null || spawnedCamera == null) return;
+			var livRender = GetLivRender();
+			if (livRender == null || spawnedCamera == null) return;
+
+			// When spawned objects get removed in Boneworks, they might not be destroyed and just be disabled.
+			if (!spawnedCamera.gameObject.activeInHierarchy)
+			{
+				spawnedCamera = null;
+				return;
+			}
+
 			var cameraTransform = spawnedCamera.transform;
-			livInstance.render.SetPose(cameraTransform.position, cameraTransform.rotation, spawnedCamera.fieldOfView);
+			livRender.SetPose(cameraTransform.position, cameraTransform.rotation, spawnedCamera.fieldOfView);
 		}
 
 		private static void SetUpLiv()
@@ -55,7 +63,7 @@ namespace BoneworksLIV
 			SDKShaders.LoadFromAssetBundle(livAssetBundle);
 		}
 
-		private Camera GetLivCamera()
+		private static Camera GetLivCamera()
 		{
 			try
 			{
@@ -63,7 +71,20 @@ namespace BoneworksLIV
 			}
 			catch (Exception)
 			{
-				MelonLogger.Msg("ObjectCollectedException");
+				LIV.SDK.Unity.LIV.Instance = null;
+			}
+			return null;
+		}
+
+
+		private static SDKRender GetLivRender()
+		{
+			try
+			{
+				return !livInstance ? null : livInstance.render;
+			}
+			catch (Exception)
+			{
 				LIV.SDK.Unity.LIV.Instance = null;
 			}
 			return null;
@@ -108,10 +129,9 @@ namespace BoneworksLIV
 			livObject.SetActive(true);
 		}
 
-		// TODO: Allow using spectator camera mods to control the LIV camera. Disabling for now.
-		private Camera GetSpawnedCamera()
+		private void SetUpSpawnedCamera()
 		{
-			if (!PoolManager._instance) return null;
+			if (!PoolManager._instance) return;
 
 			var pools = PoolManager._instance.GetComponentsInChildren<Pool>();
 			foreach (var pool in pools)
@@ -119,13 +139,16 @@ namespace BoneworksLIV
 				foreach (var spawnedObject in pool._spawnedObjects)
 				{
 					var camera = spawnedObject.GetComponentInChildren<Camera>();
-					if (camera)
-					{
-						return camera;
-					}
+					if (!camera) continue;
+
+					spawnedCamera = camera;
+
+					// Disable the spawned camera to reduce performance hit.
+					spawnedCamera.enabled = false;
+
+					return;
 				}
 			}
-			return null;
 		}
 	}
 }
