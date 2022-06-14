@@ -15,7 +15,6 @@ namespace BoneworksLIV
 		private AssetManager assetManager;
 		private GameObject livObject;
 		private Camera spawnedCamera;
-		private GameObject volCapObject;
 		private LIV.SDK.Unity.LIV livInstance => LIV.SDK.Unity.LIV.Instance;
 
 		public override void OnApplicationStart()
@@ -59,7 +58,7 @@ namespace BoneworksLIV
 			{
 				return !livInstance ? null : livInstance.HMDCamera;
 			}
-			catch (Exception exception)
+			catch (Exception)
 			{
 				MelonLogger.Msg("ObjectCollectedException");
 				LIV.SDK.Unity.LIV.Instance = null;
