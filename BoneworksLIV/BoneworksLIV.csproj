@@ -374,6 +374,7 @@
     <ItemGroup>
         <Compile Include="AssetManager.cs" />
         <Compile Include="BoneworksLivMod.cs" />
+        <Compile Include="GameLayer.cs" />
         <Compile Include="LIV\LIV.cs" />
         <Compile Include="LIV\SDKBridge.cs" />
         <Compile Include="LIV\SDKFont.cs" />

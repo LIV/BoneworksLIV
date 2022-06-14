@@ -7,7 +7,7 @@ namespace BoneworksLIV
 {
 	public class AssetManager
 	{
-		private readonly string assetsDirectory = @"C:\Users\ricar\AppData\Roaming\r2modmanPlus-local\BONEWORKS\profiles\Default\Mods\LIVAssets\";
+		private readonly string assetsDirectory;
 
 		public AssetManager(string assetsDirectory)
 		{
