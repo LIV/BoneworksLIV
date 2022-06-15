@@ -37,5 +37,5 @@ using MelonLoader;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 
 // MelonLoader
-[assembly: MelonInfo(typeof(BoneworksLivMod), "LIV", "0.1.0", "Raicuparta")]
+[assembly: MelonInfo(typeof(BoneworksLivMod), "LIV", "1.0.0", "Raicuparta")]
 [assembly: MelonGame]
