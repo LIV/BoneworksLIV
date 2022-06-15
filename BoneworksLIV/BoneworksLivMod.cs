@@ -40,10 +40,12 @@ namespace BoneworksLIV
 			if (modSettings.ShowPlayerBody)
 			{
 				livInstance.spectatorLayerMask |= 1 << (int) GameLayer.Player;
+				livInstance.spectatorLayerMask |= 1 << (int) GameLayer.LivOnly;
 			}
 			else
 			{
 				livInstance.spectatorLayerMask &= ~(1 << (int) GameLayer.Player);
+				livInstance.spectatorLayerMask &= ~(1 << (int) GameLayer.LivOnly);
 			}
 		}
 

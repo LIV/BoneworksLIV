@@ -26,6 +26,9 @@
 		FeetOnly = 23,
 		Feet = 24,
 		NoFootBall = 25,
-		Trigger = 27
+		Trigger = 27,
+
+		// Custom layers to use in the mod.
+		LivOnly = 31
 	}
 }
