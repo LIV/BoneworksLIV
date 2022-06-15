@@ -9,6 +9,8 @@ namespace BoneworksLIV
 	[HarmonyPatch]
 	public static class Patches
 	{
+		// Names of objects belonging to the head of the default Boneworks player model.
+		// TODO: investigate a good way to do this for custom models.
 		private static readonly string[] faceObjectNames =
 		{
 			"brett_face",
