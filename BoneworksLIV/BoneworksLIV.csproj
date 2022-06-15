@@ -27,12 +27,17 @@
     </PropertyGroup>
     <Target Name="copy release files" AfterTargets="PostBuildEvent" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
         <ItemGroup>
-            <ReleaseFiles Remove="@(ReleaseFiles)"/>
-            <ReleaseFiles Include="..\manifest.json"/>
-            <ReleaseFiles Include="..\README.md"/>
-            <ReleaseFiles Include="..\icon.png"/>
+            <ModPackageFiles Remove="@(ModPackageFiles)"/>
+            <ModPackageFiles Include="..\manifest.json"/>
+            <ModPackageFiles Include="..\README.md"/>
+            <ModPackageFiles Include="..\icon.png"/>
         </ItemGroup>
-        <Copy SourceFiles="@(ReleaseFiles)" DestinationFolder="$(ReleaseDirectory)"/>
+        <Copy SourceFiles="@(ModPackageFiles)" DestinationFolder="$(ReleaseDirectory)"/>
+        <ItemGroup>
+            <ReleaseFiles Remove="@(ReleaseFiles)"/>
+            <ReleaseFiles Include="$(ReleaseDirectory)/**"/>
+        </ItemGroup>
+        <ZipDirectory SourceDirectory="$(ReleaseDirectory)" DestinationFile="$(ReleaseDirectory)\..\$(AssemblyName).zip"/>
     </Target>
     <ItemGroup>
         <Reference Include="0Harmony">
