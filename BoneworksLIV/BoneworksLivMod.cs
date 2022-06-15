@@ -24,28 +24,33 @@ namespace BoneworksLIV
 			SetUpLiv();
 			ClassInjector.RegisterTypeInIl2Cpp<LIV.SDK.Unity.LIV>();
 			OnCameraReady += SetUpLiv;
-			ModSettings.OnSettingChanged += HandleModSettingChanged;
 			modSettings = new ModSettings();
+			modSettings.ShowPlayerBody.OnValueChanged += HandleShowPlayerBodyChanged;
 		}
 
-		private void HandleModSettingChanged()
+		private static void HandleShowPlayerBodyChanged(bool oldShowPlayerBody, bool newShowPlayerBody)
 		{
-			SetUpPlayerVisibility();
+			SetUpPlayerVisibility(livInstance, newShowPlayerBody);
 		}
 
-		private void SetUpPlayerVisibility()
+		// Changes the LIV layer mask to toggle the Boneworks player model visibility on LIV's camera.
+		private static void SetUpPlayerVisibility(LIV.SDK.Unity.LIV liv, bool showPlayerBody)
 		{
-			if (livInstance == null) return;
-
-			if (modSettings.ShowPlayerBody)
+			if (liv == null)
 			{
-				livInstance.spectatorLayerMask |= 1 << (int) GameLayer.Player;
-				livInstance.spectatorLayerMask |= 1 << (int) GameLayer.LivOnly;
+				MelonLogger.Error("Tried to set up player visibility but LIV instance is null");
+				return;
+			}
+
+			if (showPlayerBody)
+			{
+				liv.spectatorLayerMask |= 1 << (int) GameLayer.Player;
+				liv.spectatorLayerMask |= 1 << (int) GameLayer.LivOnly;
 			}
 			else
 			{
-				livInstance.spectatorLayerMask &= ~(1 << (int) GameLayer.Player);
-				livInstance.spectatorLayerMask &= ~(1 << (int) GameLayer.LivOnly);
+				liv.spectatorLayerMask &= ~(1 << (int) GameLayer.Player);
+				liv.spectatorLayerMask &= ~(1 << (int) GameLayer.LivOnly);
 			}
 		}
 
@@ -150,7 +155,7 @@ namespace BoneworksLIV
 			liv.MRCameraPrefab = cameraPrefab.GetComponent<Camera>();
 			liv.stage = cameraParent;
 			liv.fixPostEffectsAlpha = true;
-			liv.spectatorLayerMask = camera.cullingMask & ~(1 << (int) GameLayer.Player);
+			SetUpPlayerVisibility(liv, modSettings.ShowPlayerBody.Value);
 			livObject.SetActive(true);
 		}
 
