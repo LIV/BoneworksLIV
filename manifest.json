@@ -1,7 +1,9 @@
 {
   "name": "LIV",
-  "version_number": "0.1.0",
+  "version_number": "0.2.0",
   "description": "Add LIV support to Boneworks.",
   "website_url": "https://www.liv.tv/",
-  "dependencies": []
+  "dependencies": [
+    "LavaGang-MelonLoader-0.5.4"
+  ]
 }
