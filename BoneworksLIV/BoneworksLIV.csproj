@@ -37,7 +37,7 @@
             <ReleaseFiles Remove="@(ReleaseFiles)"/>
             <ReleaseFiles Include="$(ReleaseDirectory)/**"/>
         </ItemGroup>
-        <ZipDirectory SourceDirectory="$(ReleaseDirectory)" DestinationFile="$(ReleaseDirectory)\..\$(AssemblyName).zip"/>
+        <ZipDirectory SourceDirectory="$(ReleaseDirectory)" DestinationFile="$(ReleaseDirectory)\..\$(AssemblyName).zip" Overwrite="true"/>
     </Target>
     <ItemGroup>
         <Reference Include="0Harmony">
@@ -91,6 +91,9 @@
         <Reference Include="MelonLoader">
             <HintPath>$(MelonLoaderBaseDir)\MelonLoader\MelonLoader.dll</HintPath>
             <Private>False</Private>
+        </Reference>
+        <Reference Include="ModThatIsNotMod">
+            <HintPath>$(MelonLoaderBaseDir)\Mods\ModThatIsNotMod.dll</HintPath>
         </Reference>
         <Reference Include="SteamVR">
             <HintPath>$(MelonLoaderBaseDir)\MelonLoader\Managed\SteamVR.dll</HintPath>
@@ -395,6 +398,7 @@
         <Compile Include="LIV\SDKUniversalRender.cs"/>
         <Compile Include="LIV\SDKUniversalRenderFeature.cs"/>
         <Compile Include="LIV\SDKUtils.cs"/>
+        <Compile Include="ModSettings.cs"/>
         <Compile Include="Patches.cs"/>
         <Compile Include="Properties\AssemblyInfo.cs"/>
         <Compile Include="SystemLibrary.cs"/>

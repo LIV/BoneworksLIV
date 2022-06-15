@@ -1,9 +1,10 @@
 {
   "name": "LIV",
-  "version_number": "0.2.0",
+  "version_number": "0.3.0",
   "description": "Add LIV support to Boneworks.",
   "website_url": "https://www.liv.tv/",
   "dependencies": [
-    "LavaGang-MelonLoader-0.5.4"
+    "LavaGang-MelonLoader-0.5.4",
+    "gnonme-ModThatIsNotMod-0.3.4"
   ]
 }

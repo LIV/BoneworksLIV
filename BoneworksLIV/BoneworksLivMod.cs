@@ -10,8 +10,10 @@ namespace BoneworksLIV
 {
 	public class BoneworksLivMod : MelonMod
 	{
-		public static Action<Camera> PlayerReady;
+		public static Action<Camera> OnCameraReady;
+
 		private GameObject livObject;
+		private ModSettings modSettings;
 		private Camera spawnedCamera;
 		private static LIV.SDK.Unity.LIV livInstance => LIV.SDK.Unity.LIV.Instance;
 
@@ -21,7 +23,28 @@ namespace BoneworksLIV
 
 			SetUpLiv();
 			ClassInjector.RegisterTypeInIl2Cpp<LIV.SDK.Unity.LIV>();
-			PlayerReady += SetUpLiv;
+			OnCameraReady += SetUpLiv;
+			ModSettings.OnSettingChanged += HandleModSettingChanged;
+			modSettings = new ModSettings();
+		}
+
+		private void HandleModSettingChanged()
+		{
+			SetUpPlayerVisibility();
+		}
+
+		private void SetUpPlayerVisibility()
+		{
+			if (livInstance == null) return;
+
+			if (modSettings.ShowPlayerBody)
+			{
+				livInstance.spectatorLayerMask |= 1 << (int) GameLayer.Player;
+			}
+			else
+			{
+				livInstance.spectatorLayerMask &= ~(1 << (int) GameLayer.Player);
+			}
 		}
 
 		public override void OnUpdate()
