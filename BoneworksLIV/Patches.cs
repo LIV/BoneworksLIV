@@ -29,6 +29,10 @@ namespace BoneworksLIV
 		[HarmonyPatch(typeof(CharacterAnimationManager), "OnEnable")]
 		private static void SetUpBodyVisibility(CharacterAnimationManager __instance)
 		{
+			var renderers = __instance.GetComponentsInChildren<SkinnedMeshRenderer>(true);
+			var bodyRenderer = renderers.First(renderer => renderer.name == "brett_body");
+			var bodyRendererCopyEnabledState = bodyRenderer.gameObject.AddComponent<BodyRendererManager>();
+
 			foreach (var renderer in __instance.GetComponentsInChildren<SkinnedMeshRenderer>(true))
 			{
 				var rendererObject = renderer.gameObject;
@@ -36,6 +40,7 @@ namespace BoneworksLIV
 
 				if (isHeadObject)
 				{
+					bodyRendererCopyEnabledState.headRenderers.Add(renderer);
 					rendererObject.SetActive(true);
 				}
 				rendererObject.layer = isHeadObject ? (int) GameLayer.LivOnly : (int) GameLayer.Player;

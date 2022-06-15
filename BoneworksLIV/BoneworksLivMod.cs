@@ -23,6 +23,7 @@ namespace BoneworksLIV
 
 			SetUpLiv();
 			ClassInjector.RegisterTypeInIl2Cpp<LIV.SDK.Unity.LIV>();
+			ClassInjector.RegisterTypeInIl2Cpp<BodyRendererManager>();
 			OnCameraReady += SetUpLiv;
 			modSettings = new ModSettings();
 			modSettings.ShowPlayerBody.OnValueChanged += HandleShowPlayerBodyChanged;
