@@ -94,6 +94,7 @@
         </Reference>
         <Reference Include="ModThatIsNotMod">
             <HintPath>$(MelonLoaderBaseDir)\Mods\ModThatIsNotMod.dll</HintPath>
+            <Private>False</Private>
         </Reference>
         <Reference Include="SteamVR">
             <HintPath>$(MelonLoaderBaseDir)\MelonLoader\Managed\SteamVR.dll</HintPath>
@@ -109,6 +110,7 @@
         <Reference Include="System.Xml" />
         <Reference Include="Tomlet">
             <HintPath>$(MelonLoaderBaseDir)\MelonLoader\Tomlet.dll</HintPath>
+            <Private>False</Private>
         </Reference>
         <Reference Include="UnhollowerBaseLib">
             <HintPath>$(MelonLoaderBaseDir)\MelonLoader\Managed\UnhollowerBaseLib.dll</HintPath>
