@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+    <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')"/>
     <PropertyGroup>
         <ProjectGuid>{A5EB24E0-C133-4435-B569-55E86FEB6022}</ProjectGuid>
         <OutputType>Library</OutputType>
@@ -27,17 +27,14 @@
     </PropertyGroup>
     <Target Name="copy release files" AfterTargets="PostBuildEvent" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
         <ItemGroup>
-            <ModPackageFiles Remove="@(ModPackageFiles)" />
-            <ModPackageFiles Include="..\manifest.json" />
-            <ModPackageFiles Include="..\README.md" />
-            <ModPackageFiles Include="..\icon.png" />
+            <ModPackageFiles Include="ModPackageFiles\*"/>
         </ItemGroup>
-        <Copy SourceFiles="@(ModPackageFiles)" DestinationFolder="$(ReleaseDirectory)" />
+        <Copy SourceFiles="@(ModPackageFiles)" DestinationFolder="$(ReleaseDirectory)"/>
         <ItemGroup>
-            <ReleaseFiles Remove="@(ReleaseFiles)" />
-            <ReleaseFiles Include="$(ReleaseDirectory)/**" />
+            <ReleaseFiles Remove="@(ReleaseFiles)"/>
+            <ReleaseFiles Include="$(ReleaseDirectory)/**"/>
         </ItemGroup>
-        <ZipDirectory SourceDirectory="$(ReleaseDirectory)" DestinationFile="$(ReleaseDirectory)\..\$(AssemblyName).zip" Overwrite="true" />
+        <ZipDirectory SourceDirectory="$(ReleaseDirectory)" DestinationFile="$(ReleaseDirectory)\..\$(AssemblyName).zip" Overwrite="true"/>
     </Target>
     <ItemGroup>
         <Reference Include="0Harmony">
@@ -104,10 +101,10 @@
             <HintPath>$(MelonLoaderBaseDir)\MelonLoader\Managed\SteamVR_Actions.dll</HintPath>
             <Private>False</Private>
         </Reference>
-        <Reference Include="System" />
-        <Reference Include="System.Core" />
-        <Reference Include="System.Data" />
-        <Reference Include="System.Xml" />
+        <Reference Include="System"/>
+        <Reference Include="System.Core"/>
+        <Reference Include="System.Data"/>
+        <Reference Include="System.Xml"/>
         <Reference Include="Tomlet">
             <HintPath>$(MelonLoaderBaseDir)\MelonLoader\Tomlet.dll</HintPath>
             <Private>False</Private>
@@ -390,24 +387,24 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="AssetManager.cs" />
-        <Compile Include="BoneworksLivMod.cs" />
-        <Compile Include="BodyRendererManager.cs" />
-        <Compile Include="GameLayer.cs" />
-        <Compile Include="LIV\LIV.cs" />
-        <Compile Include="LIV\SDKBridge.cs" />
-        <Compile Include="LIV\SDKFont.cs" />
-        <Compile Include="LIV\SDKRender.cs" />
-        <Compile Include="LIV\SDKRenderShared.cs" />
-        <Compile Include="LIV\SDKShaders.cs" />
-        <Compile Include="LIV\SDKStructs.cs" />
-        <Compile Include="LIV\SDKUniversalRender.cs" />
-        <Compile Include="LIV\SDKUniversalRenderFeature.cs" />
-        <Compile Include="LIV\SDKUtils.cs" />
-        <Compile Include="ModSettings.cs" />
-        <Compile Include="Patches.cs" />
-        <Compile Include="Properties\AssemblyInfo.cs" />
-        <Compile Include="SystemLibrary.cs" />
+        <Compile Include="AssetManager.cs"/>
+        <Compile Include="BoneworksLivMod.cs"/>
+        <Compile Include="BodyRendererManager.cs"/>
+        <Compile Include="GameLayer.cs"/>
+        <Compile Include="LIV\LIV.cs"/>
+        <Compile Include="LIV\SDKBridge.cs"/>
+        <Compile Include="LIV\SDKFont.cs"/>
+        <Compile Include="LIV\SDKRender.cs"/>
+        <Compile Include="LIV\SDKRenderShared.cs"/>
+        <Compile Include="LIV\SDKShaders.cs"/>
+        <Compile Include="LIV\SDKStructs.cs"/>
+        <Compile Include="LIV\SDKUniversalRender.cs"/>
+        <Compile Include="LIV\SDKUniversalRenderFeature.cs"/>
+        <Compile Include="LIV\SDKUtils.cs"/>
+        <Compile Include="ModSettings.cs"/>
+        <Compile Include="Patches.cs"/>
+        <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="SystemLibrary.cs"/>
     </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Include="..\BoneworksLivUnity\AssetBundles\liv-shaders">
@@ -428,10 +425,11 @@
             <Link>LIVAssets\stencil-mask.manifest</Link>
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
-        <Content Include="Directory.Build.props" />
+        <Content Include="Directory.Build.props"/>
         <Content Include="LIVAssets\LIV_Bridge.dll">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
+        <Content Include="ModPackageFiles\*"/>
     </ItemGroup>
-    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+    <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
 </Project>
