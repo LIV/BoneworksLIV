@@ -46,5 +46,12 @@ namespace BoneworksLIV
 				rendererObject.layer = isHeadObject ? (int) GameLayer.LivOnly : (int) GameLayer.Player;
 			}
 		}
+		
+		[HarmonyPostfix]
+		[HarmonyPatch(typeof(RigEvent), "Awake")]
+		private static void HideHeadEffectsFromLiv(RigEvent __instance)
+		{
+			__instance.gameObject.layer = (int) GameLayer.Player;
+		}
 	}
 }
