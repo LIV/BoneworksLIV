@@ -25,26 +25,26 @@ namespace BoneworksLIV
 			capsuleX.name = "boneCapsuleZ";
 			Destroy(capsuleX.GetComponent<Collider>());
 			capsuleX.transform.SetParent(sphere.transform, false);
-			capsuleX.transform.localScale = new Vector3(0.1f, 0.5f, 0.1f);
+			capsuleX.transform.localScale = new Vector3(0.5f, 2.5f, 0.5f);
 			capsuleX.transform.localEulerAngles = Vector3.forward * 90f;
-			capsuleX.transform.localPosition = Vector3.right * 0.5f;
+			capsuleX.transform.localPosition = Vector3.right * 2.5f;
 			capsuleX.GetComponent<Renderer>().material.color = Color.red;
 			
 			var capsuleY = GameObject.CreatePrimitive(PrimitiveType.Capsule);
 			capsuleY.name = "boneCapsuleY";
 			Destroy(capsuleY.GetComponent<Collider>());
 			capsuleY.transform.SetParent(sphere.transform, false);
-			capsuleY.transform.localScale = new Vector3(0.1f, 0.5f, 0.1f);
-			capsuleY.transform.localPosition = Vector3.up * 0.5f;
+			capsuleY.transform.localScale = new Vector3(0.5f, 2.5f, 0.5f);
+			capsuleY.transform.localPosition = Vector3.up * 2.5f;
 			capsuleY.GetComponent<Renderer>().material.color = Color.green;
 			
 			var capsuleZ = GameObject.CreatePrimitive(PrimitiveType.Capsule);
 			capsuleZ.name = "boneCapsuleX";
 			Destroy(capsuleZ.GetComponent<Collider>());
 			capsuleZ.transform.SetParent(sphere.transform, false);
-			capsuleZ.transform.localScale = new Vector3(0.1f, 0.5f, 0.1f);
+			capsuleZ.transform.localScale = new Vector3(0.5f, 2.5f, 0.5f);
 			capsuleZ.transform.localEulerAngles = Vector3.right * 90f;
-			capsuleZ.transform.localPosition = Vector3.forward * 0.5f;
+			capsuleZ.transform.localPosition = Vector3.forward * 2.5f;
 			capsuleZ.GetComponent<Renderer>().material.color = Color.blue;
 			
 			var text = new GameObject("BoneText");
