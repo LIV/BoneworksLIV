@@ -28,6 +28,7 @@
     <Target Name="copy release files" AfterTargets="PostBuildEvent" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
         <ItemGroup>
             <ModPackageFiles Include="ModPackageFiles\*" />
+            <ModPackageFiles Include="..\README.md" />
         </ItemGroup>
         <Copy SourceFiles="@(ModPackageFiles)" DestinationFolder="$(ReleaseDirectory)" />
         <ItemGroup>
@@ -424,9 +425,6 @@
         <Content Include="..\BoneworksLivUnity\AssetBundles\stencil-mask.manifest">
             <Link>LIVAssets\stencil-mask.manifest</Link>
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
-        <Content Include="..\README.md">
-          <Link>ModPackageFiles\README.md</Link>
         </Content>
         <Content Include="Directory.Build.props" />
         <Content Include="LIVAssets\LIV_Bridge.dll">
