@@ -22,7 +22,7 @@ namespace BoneworksLIV
 			sphere.transform.localScale = Vector3.one * 0.005f;
 			
 			var capsuleX = GameObject.CreatePrimitive(PrimitiveType.Capsule);
-			capsuleX.name = "boneCapsuleZ";
+			capsuleX.name = "boneCapsuleX";
 			Destroy(capsuleX.GetComponent<Collider>());
 			capsuleX.transform.SetParent(sphere.transform, false);
 			capsuleX.transform.localScale = new Vector3(0.5f, 2.5f, 0.5f);
@@ -39,7 +39,7 @@ namespace BoneworksLIV
 			capsuleY.GetComponent<Renderer>().material.color = Color.green;
 			
 			var capsuleZ = GameObject.CreatePrimitive(PrimitiveType.Capsule);
-			capsuleZ.name = "boneCapsuleX";
+			capsuleZ.name = "boneCapsuleZ";
 			Destroy(capsuleZ.GetComponent<Collider>());
 			capsuleZ.transform.SetParent(sphere.transform, false);
 			capsuleZ.transform.localScale = new Vector3(0.5f, 2.5f, 0.5f);

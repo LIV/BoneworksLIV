@@ -46,7 +46,7 @@ namespace BoneworksLIV
 					bodyRendererCopyEnabledState.headRenderers.Add(renderer);
 					rendererObject.SetActive(true);
 				}
-				rendererObject.layer = isHeadObject ? (int) GameLayer.LivOnly : (int) GameLayer.Player;
+				rendererObject.layer = (int) GameLayer.LivOnly;
 			}
 
 			var skeleton = __instance.transform.Find("SHJntGrp");
