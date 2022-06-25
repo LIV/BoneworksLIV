@@ -24,8 +24,12 @@ Adds [**LIV**](https://store.steampowered.com/app/755540/LIV/) support to Bonewo
 
 - Press "Start modded" in r2modman to start the game. You'll have to use this button every time you want to use LIV with Boneworks.
 - Start the LIV PCVR Mixed Reality Capture / Avatars tool.
-- If you're in Auto mode, Boneworks should be automatically detected.
+- If you're in Auto mode, Boneworks should be automatically detected. You might need to be on the "latest" beta branch of LIV for the auto-detection to work.
+
 ![image](https://user-images.githubusercontent.com/3955124/175016312-ea9b4e38-27d7-4d5f-8c4f-1a66f093d8bf.png)
+- If auto-detection doesn't work, change to manual mode and select the Boneworks exe.
+
+![image](https://user-images.githubusercontent.com/3955124/175768728-39843500-2ee9-4844-8f0c-a449b44a0502.png)
 
 
 ## Known problems and reporting bugs
