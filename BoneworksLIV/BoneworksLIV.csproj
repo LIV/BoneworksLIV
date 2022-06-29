@@ -391,6 +391,7 @@
         <Compile Include="AssetManager.cs" />
         <Compile Include="AvatarTrackers\PathfinderRigidTransformSet.cs" />
         <Compile Include="AvatarTrackers\SDKBridgePathfinder.cs" />
+        <Compile Include="BoneText.cs" />
         <Compile Include="BoneworksLivMod.cs" />
         <Compile Include="BodyRendererManager.cs" />
         <Compile Include="GameLayer.cs" />

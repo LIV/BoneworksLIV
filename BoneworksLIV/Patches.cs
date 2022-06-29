@@ -1,7 +1,10 @@
 ﻿using System.Linq;
 using BoneworksLIV.AvatarTrackers;
 using HarmonyLib;
+using RealisticEyeMovements;
+using RootMotion.FinalIK;
 using StressLevelZero.Player;
+using TMPro;
 using UnityEngine;
 using Valve.VR;
 
@@ -46,7 +49,16 @@ namespace BoneworksLIV
 					bodyRendererCopyEnabledState.headRenderers.Add(renderer);
 					rendererObject.SetActive(true);
 				}
-				rendererObject.layer = isHeadObject ? (int) GameLayer.LivOnly : (int) GameLayer.Player;
+				rendererObject.layer = (int) GameLayer.LivOnly;
+			}
+
+			var skeleton = __instance.transform.Find("SHJntGrp");
+			var children = skeleton.GetComponentsInChildren<Transform>();
+
+			foreach (var child in children)
+			{
+				if (child.gameObject.GetComponent<BoneText>()) continue;
+				child.gameObject.AddComponent<BoneText>();
 			}
 		}
 		
