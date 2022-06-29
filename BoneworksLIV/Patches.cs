@@ -25,17 +25,17 @@ namespace BoneworksLIV
 
 		private static readonly Dictionary<string, string> boneMap = new Dictionary<string, string>()
 		{
-			{ "Neck_01SHJnt", "avatar.trackers.head" }, // other options: Neck_02SHJnt / Neck_TopSHJnt / Head_JawSHJnt / Head_TopSHJnt
-			{ "Spine_TopSHJnt", "avatar.trackers.chest" },
-			{ "ROOTSHJnt", "avatar.trackers.waist" },
-			{ "l_Hand_1SHJnt", "avatar.trackers.leftHand" }, // other options:  l_Hand_1SHJnt / l_Hand_2SHJnt / l_GripPoint_AuxSHJnt
-			{ "l_Arm_Elbow_CurveSHJnt", "avatar.trackers.leftElbowGoal" },
-			{ "r_Hand_1SHJnt", "avatar.trackers.rightHand" }, // other options: r_Hand_1SHJnt / r_Hand_2SHJnt / r_GripPoint_AuxSHJnt
-			{ "r_Arm_Elbow_CurveSHJnt", "avatar.trackers.rightElbowGoal" },
-			{ "l_Leg_AnkleSHJnt", "avatar.trackers.leftFoot" }, // other options:  l_Leg_BallSHJnt
-			{ "l_Leg_KneeSHJnt", "avatar.trackers.leftKneeGoal" },
-			{ "r_Leg_AnkleSHJnt", "avatar.trackers.rightFoot" }, // other options: r_Leg_BallSHJnt
-			{ "r_Leg_KneeSHJnt", "avatar.trackers.rightKneeGoal" },
+			{ "Neck_01SHJnt", "stage.avatar.trackers.head" }, // other options: Neck_02SHJnt / Neck_TopSHJnt / Head_JawSHJnt / Head_TopSHJnt
+			{ "Spine_TopSHJnt", "stage.avatar.trackers.chest" },
+			{ "ROOTSHJnt", "stage.avatar.trackers.waist" },
+			{ "l_Hand_1SHJnt", "stage.avatar.trackers.leftHand" }, // other options:  l_Hand_1SHJnt / l_Hand_2SHJnt / l_GripPoint_AuxSHJnt
+			{ "l_Arm_Elbow_CurveSHJnt", "stage.avatar.trackers.leftElbowGoal" },
+			{ "r_Hand_1SHJnt", "stage.avatar.trackers.rightHand" }, // other options: r_Hand_1SHJnt / r_Hand_2SHJnt / r_GripPoint_AuxSHJnt
+			{ "r_Arm_Elbow_CurveSHJnt", "stage.avatar.trackers.rightElbowGoal" },
+			{ "l_Leg_AnkleSHJnt", "stage.avatar.trackers.leftFoot" }, // other options:  l_Leg_BallSHJnt
+			{ "l_Leg_KneeSHJnt", "stage.avatar.trackers.leftKneeGoal" },
+			{ "r_Leg_AnkleSHJnt", "stage.avatar.trackers.rightFoot" }, // other options: r_Leg_BallSHJnt
+			{ "r_Leg_KneeSHJnt", "stage.avatar.trackers.rightKneeGoal" },
 		};
 
 		[HarmonyPostfix]
