@@ -13,10 +13,9 @@ namespace BoneworksLIV.AvatarTrackers
     public class PathfinderRigidTransformSet: MonoBehaviour
     {
         private SDKRigidTransform rigidTransform;
-        private string key = "game.toWorld";
+        public Transform Root;
+        public string Key;
         private const string pathBase = "LIV.FPSSTAB.";
-        public SDKRigidTransform outputLocal;
-        public SDKRigidTransform outputGlobal;
         
         public PathfinderRigidTransformSet(IntPtr ptr) : base(ptr)
 		{
@@ -24,14 +23,13 @@ namespace BoneworksLIV.AvatarTrackers
         
         private void Update()
         {
-            rigidTransform.pos = transform.position;
-            rigidTransform.rot = transform.rotation;
+            if (!Root) return;
 
-            SDKBridgePathfinder.SetValue<SDKRigidTransform>($"{pathBase}{key}", ref rigidTransform, (int) PathfinderType.RigidTransform);
-                
-            SDKBridgePathfinder.GetValue<SDKRigidTransform>($"{pathBase}{key}", out outputLocal, (int) PathfinderType.RigidTransform);
-            SDKBridgePathfinder.GetValue<SDKRigidTransform>($"LIV.FPSSTAB.{key}", out outputGlobal, (int) PathfinderType.RigidTransform);
-            
+            rigidTransform.pos = Root.InverseTransformPoint(transform.position);
+            rigidTransform.rot = Quaternion.Inverse(Root.rotation) * transform.rotation;
+
+            SDKBridgePathfinder.SetValue($"{pathBase}{Key}", ref rigidTransform, (int) PathfinderType.RigidTransform);
+
         }
     }
 }

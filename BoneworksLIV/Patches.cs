@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using BoneworksLIV.AvatarTrackers;
 using HarmonyLib;
 using RealisticEyeMovements;
@@ -20,6 +21,21 @@ namespace BoneworksLIV
 			"brett_face",
 			"brett_hairCap",
 			"brett_hairCards"
+		};
+
+		private static readonly Dictionary<string, string> boneMap = new Dictionary<string, string>()
+		{
+			{ "Neck_01SHJnt", "avatar.trackers.head" }, // other options: Neck_02SHJnt / Neck_TopSHJnt / Head_JawSHJnt / Head_TopSHJnt
+			{ "Spine_TopSHJnt", "avatar.trackers.chest" },
+			{ "ROOTSHJnt", "avatar.trackers.waist" },
+			{ "l_Hand_1SHJnt", "avatar.trackers.leftHand" }, // other options:  l_Hand_1SHJnt / l_Hand_2SHJnt / l_GripPoint_AuxSHJnt
+			{ "l_Arm_Elbow_CurveSHJnt", "avatar.trackers.leftElbowGoal" },
+			{ "r_Hand_1SHJnt", "avatar.trackers.rightHand" }, // other options: r_Hand_1SHJnt / r_Hand_2SHJnt / r_GripPoint_AuxSHJnt
+			{ "r_Arm_Elbow_CurveSHJnt", "avatar.trackers.rightElbowGoal" },
+			{ "l_Leg_AnkleSHJnt", "avatar.trackers.leftFoot" }, // other options:  l_Leg_BallSHJnt
+			{ "l_Leg_KneeSHJnt", "avatar.trackers.leftKneeGoal" },
+			{ "r_Leg_AnkleSHJnt", "avatar.trackers.rightFoot" }, // other options: r_Leg_BallSHJnt
+			{ "r_Leg_KneeSHJnt", "avatar.trackers.rightKneeGoal" },
 		};
 
 		[HarmonyPostfix]
@@ -57,6 +73,13 @@ namespace BoneworksLIV
 
 			foreach (var child in children)
 			{
+				if (boneMap.ContainsKey(child.name))
+				{
+					var rigidTransformSet = child.gameObject.AddComponent<PathfinderRigidTransformSet>();
+					rigidTransformSet.Key = boneMap[child.name];
+					rigidTransformSet.Root = __instance.transform;
+				}
+				
 				if (child.gameObject.GetComponent<BoneText>()) continue;
 				child.gameObject.AddComponent<BoneText>();
 			}
