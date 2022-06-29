@@ -1,4 +1,5 @@
 ﻿using System;
+using BoneworksLIV.AvatarTrackers;
 using LIV.SDK.Unity;
 using MelonLoader;
 using StressLevelZero.Pool;
@@ -24,6 +25,7 @@ namespace BoneworksLIV
 			SetUpLiv();
 			ClassInjector.RegisterTypeInIl2Cpp<LIV.SDK.Unity.LIV>();
 			ClassInjector.RegisterTypeInIl2Cpp<BodyRendererManager>();
+			ClassInjector.RegisterTypeInIl2Cpp<PathfinderRigidTransformSet>();
 			OnCameraReady += SetUpLiv;
 			modSettings = new ModSettings();
 			modSettings.ShowPlayerBody.OnValueChanged += HandleShowPlayerBodyChanged;

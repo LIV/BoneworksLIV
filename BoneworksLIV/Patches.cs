@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using BoneworksLIV.AvatarTrackers;
 using HarmonyLib;
 using StressLevelZero.Player;
 using UnityEngine;
@@ -33,6 +34,8 @@ namespace BoneworksLIV
 			var bodyRenderer = renderers.First(renderer => renderer.name == "brett_body");
 			var bodyRendererCopyEnabledState = bodyRenderer.gameObject.AddComponent<BodyRendererManager>();
 
+			__instance.gameObject.AddComponent<PathfinderRigidTransformSet>();
+			
 			foreach (var renderer in __instance.GetComponentsInChildren<SkinnedMeshRenderer>(true))
 			{
 				var rendererObject = renderer.gameObject;
