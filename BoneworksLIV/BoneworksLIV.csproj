@@ -389,7 +389,8 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="AssetManager.cs" />
-        <Compile Include="AvatarTrackers\PathfinderRigidTransformSet.cs" />
+        <Compile Include="AvatarTrackers\PathfinderAvatarTrackers.cs" />
+        <Compile Include="AvatarTrackers\PathfinderRigidTransform.cs" />
         <Compile Include="AvatarTrackers\SDKBridgePathfinder.cs" />
         <Compile Include="BoneText.cs" />
         <Compile Include="BoneworksLivMod.cs" />

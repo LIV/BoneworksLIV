@@ -23,21 +23,6 @@ namespace BoneworksLIV
 			"brett_hairCards"
 		};
 
-		private static readonly Dictionary<string, string> boneMap = new Dictionary<string, string>()
-		{
-			{ "Neck_01SHJnt", "stage.avatar.trackers.head" }, // other options: Neck_02SHJnt / Neck_TopSHJnt / Head_JawSHJnt / Head_TopSHJnt
-			{ "Spine_TopSHJnt", "stage.avatar.trackers.chest" },
-			{ "ROOTSHJnt", "stage.avatar.trackers.waist" },
-			{ "l_Hand_1SHJnt", "stage.avatar.trackers.leftHand" }, // other options:  l_Hand_1SHJnt / l_Hand_2SHJnt / l_GripPoint_AuxSHJnt
-			{ "l_Arm_Elbow_CurveSHJnt", "stage.avatar.trackers.leftElbowGoal" },
-			{ "r_Hand_1SHJnt", "stage.avatar.trackers.rightHand" }, // other options: r_Hand_1SHJnt / r_Hand_2SHJnt / r_GripPoint_AuxSHJnt
-			{ "r_Arm_Elbow_CurveSHJnt", "stage.avatar.trackers.rightElbowGoal" },
-			{ "l_Leg_AnkleSHJnt", "stage.avatar.trackers.leftFoot" }, // other options:  l_Leg_BallSHJnt
-			{ "l_Leg_KneeSHJnt", "stage.avatar.trackers.leftKneeGoal" },
-			{ "r_Leg_AnkleSHJnt", "stage.avatar.trackers.rightFoot" }, // other options: r_Leg_BallSHJnt
-			{ "r_Leg_KneeSHJnt", "stage.avatar.trackers.rightKneeGoal" },
-		};
-
 		[HarmonyPostfix]
 		[HarmonyPatch(typeof(SteamVR_Camera), "OnEnable")]
 		private static void SetUpLiv(SteamVR_Camera __instance)
@@ -53,7 +38,7 @@ namespace BoneworksLIV
 			var bodyRenderer = renderers.First(renderer => renderer.name == "brett_body");
 			var bodyRendererCopyEnabledState = bodyRenderer.gameObject.AddComponent<BodyRendererManager>();
 
-			__instance.gameObject.AddComponent<PathfinderRigidTransformSet>();
+			__instance.gameObject.AddComponent<PathfinderRigidTransform>();
 			
 			foreach (var renderer in __instance.GetComponentsInChildren<SkinnedMeshRenderer>(true))
 			{
@@ -68,21 +53,7 @@ namespace BoneworksLIV
 				rendererObject.layer = (int) GameLayer.LivOnly;
 			}
 
-			var skeleton = __instance.transform.Find("SHJntGrp");
-			var children = skeleton.GetComponentsInChildren<Transform>();
-
-			foreach (var child in children)
-			{
-				if (boneMap.ContainsKey(child.name))
-				{
-					var rigidTransformSet = child.gameObject.AddComponent<PathfinderRigidTransformSet>();
-					rigidTransformSet.Key = boneMap[child.name];
-					rigidTransformSet.Root = __instance.transform;
-				}
-				
-				if (child.gameObject.GetComponent<BoneText>()) continue;
-				child.gameObject.AddComponent<BoneText>();
-			}
+			__instance.gameObject.AddComponent<PathfinderAvatarTrackers>();
 		}
 		
 		[HarmonyPostfix]

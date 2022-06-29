@@ -10,26 +10,30 @@ namespace BoneworksLIV.AvatarTrackers
         public SDKQuaternion rot;
     }
     
-    public class PathfinderRigidTransformSet: MonoBehaviour
+    
+    public class PathfinderRigidTransform: MonoBehaviour
     {
         private SDKRigidTransform rigidTransform;
         public Transform Root;
         public string Key;
-        private const string pathBase = "LIV.FPSSTAB.";
+        public string PathBase;
+        private string path;
         
-        public PathfinderRigidTransformSet(IntPtr ptr) : base(ptr)
-		{
-		}
-        
-        private void Update()
-        {
-            if (!Root) return;
+        public PathfinderRigidTransform(IntPtr ptr) : base(ptr)
+	    {
+	    }
 
+        private void Start()
+        {
+            path = $"{PathBase}.{Key}";
+        }
+
+        public void SetPathfinderValuesLocally()
+        {
             rigidTransform.pos = Root.InverseTransformPoint(transform.position);
             rigidTransform.rot = Quaternion.Inverse(Root.rotation) * transform.rotation;
 
-            SDKBridgePathfinder.SetValue($"{pathBase}{Key}", ref rigidTransform, (int) PathfinderType.RigidTransform);
-
+            SDKBridgePathfinder.SetValue(path, ref rigidTransform, (int) PathfinderType.RigidTransform);
         }
     }
 }

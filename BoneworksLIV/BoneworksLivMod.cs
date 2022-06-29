@@ -25,7 +25,8 @@ namespace BoneworksLIV
 			SetUpLiv();
 			ClassInjector.RegisterTypeInIl2Cpp<LIV.SDK.Unity.LIV>();
 			ClassInjector.RegisterTypeInIl2Cpp<BodyRendererManager>();
-			ClassInjector.RegisterTypeInIl2Cpp<PathfinderRigidTransformSet>();
+			ClassInjector.RegisterTypeInIl2Cpp<PathfinderRigidTransform>();
+			ClassInjector.RegisterTypeInIl2Cpp<PathfinderAvatarTrackers>();
 			ClassInjector.RegisterTypeInIl2Cpp<BoneText>();
 			OnCameraReady += SetUpLiv;
 			modSettings = new ModSettings();

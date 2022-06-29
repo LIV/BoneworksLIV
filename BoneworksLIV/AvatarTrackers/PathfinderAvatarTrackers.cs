@@ -1,0 +1,62 @@
+﻿using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace BoneworksLIV.AvatarTrackers
+{
+    public class PathfinderAvatarTrackers: MonoBehaviour
+    {
+	    private const string localPathBase = "localAvatarTrackers.bob";
+	    private const string globalPathBase = "LIV.avatarTrackers";
+		private static readonly Dictionary<string, string> boneMap = new Dictionary<string, string>()
+		{
+			{ "Neck_01SHJnt", "bob.stage.avatar.trackers.head" }, // other options: Neck_02SHJnt / Neck_TopSHJnt / Head_JawSHJnt / Head_TopSHJnt
+			{ "Spine_TopSHJnt", "bob.stage.avatar.trackers.chest" },
+			{ "ROOTSHJnt", "bob.stage.avatar.trackers.waist" },
+			{ "l_Hand_1SHJnt", "bob.stage.avatar.trackers.leftHand" }, // other options:  l_Hand_1SHJnt / l_Hand_2SHJnt / l_GripPoint_AuxSHJnt
+			{ "l_Arm_Elbow_CurveSHJnt", "bob.stage.avatar.trackers.leftElbowGoal" },
+			{ "r_Hand_1SHJnt", "bob.stage.avatar.trackers.rightHand" }, // other options: r_Hand_1SHJnt / r_Hand_2SHJnt / r_GripPoint_AuxSHJnt
+			{ "r_Arm_Elbow_CurveSHJnt", "bob.stage.avatar.trackers.rightElbowGoal" },
+			{ "l_Leg_AnkleSHJnt", "bob.stage.avatar.trackers.leftFoot" }, // other options:  l_Leg_BallSHJnt
+			{ "l_Leg_KneeSHJnt", "bob.stage.avatar.trackers.leftKneeGoal" },
+			{ "r_Leg_AnkleSHJnt", "bob.stage.avatar.trackers.rightFoot" }, // other options: r_Leg_BallSHJnt
+			{ "r_Leg_KneeSHJnt", "bob.stage.avatar.trackers.rightKneeGoal" },
+		};
+
+		private readonly List<PathfinderRigidTransform> pathfinderRigidTransforms = new List<PathfinderRigidTransform>();
+	    
+        public PathfinderAvatarTrackers(IntPtr ptr) : base(ptr)
+		{
+		}
+
+        private void Awake()
+        {
+	        var skeleton = transform.Find("SHJntGrp");
+			var children = skeleton.GetComponentsInChildren<Transform>();
+			foreach (var child in children)
+			{
+				if (boneMap.ContainsKey(child.name))
+				{
+					var rigidTransformSet = child.gameObject.AddComponent<PathfinderRigidTransform>();
+					rigidTransformSet.Key = boneMap[child.name];
+					rigidTransformSet.Root = transform;
+					rigidTransformSet.PathBase = localPathBase;
+					pathfinderRigidTransforms.Add(rigidTransformSet);
+				}
+				
+				if (child.gameObject.GetComponent<BoneText>()) continue;
+				child.gameObject.AddComponent<BoneText>();
+			}
+        }
+
+        private void Update()
+        {
+	        foreach (var pathfinderRigidTransform in pathfinderRigidTransforms)
+	        {
+		        pathfinderRigidTransform.SetPathfinderValuesLocally();
+	        }
+
+	        SDKBridgePathfinder.CopyPath(globalPathBase, localPathBase);
+        }
+    }
+}
