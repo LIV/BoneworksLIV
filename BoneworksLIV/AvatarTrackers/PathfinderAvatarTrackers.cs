@@ -6,6 +6,8 @@ namespace BoneworksLIV.AvatarTrackers
 {
     public class PathfinderAvatarTrackers: MonoBehaviour
     {
+	    public static Transform Root { get; private set; }
+	    
 	    private const string localPathBase = "localAvatarTrackers.bob";
 	    private const string globalPathBase = "LIV.avatarTrackers";
 		private static readonly Dictionary<string, string> boneMap = new Dictionary<string, string>()
@@ -33,19 +35,16 @@ namespace BoneworksLIV.AvatarTrackers
         {
 	        var skeleton = transform.Find("SHJntGrp");
 			var children = skeleton.GetComponentsInChildren<Transform>();
+			Root = BoneworksLivMod.Stage;
 			foreach (var child in children)
 			{
 				if (boneMap.ContainsKey(child.name))
 				{
 					var rigidTransformSet = child.gameObject.AddComponent<PathfinderRigidTransform>();
 					rigidTransformSet.Key = boneMap[child.name];
-					rigidTransformSet.Root = transform;
 					rigidTransformSet.PathBase = localPathBase;
 					pathfinderRigidTransforms.Add(rigidTransformSet);
 				}
-				
-				if (child.gameObject.GetComponent<BoneText>()) continue;
-				child.gameObject.AddComponent<BoneText>();
 			}
         }
 

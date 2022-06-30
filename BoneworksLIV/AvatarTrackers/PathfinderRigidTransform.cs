@@ -14,7 +14,6 @@ namespace BoneworksLIV.AvatarTrackers
     public class PathfinderRigidTransform: MonoBehaviour
     {
         private SDKRigidTransform rigidTransform;
-        public Transform Root;
         public string Key;
         public string PathBase;
         private string path;
@@ -30,8 +29,10 @@ namespace BoneworksLIV.AvatarTrackers
 
         public void SetPathfinderValuesLocally()
         {
-            rigidTransform.pos = Root.InverseTransformPoint(transform.position);
-            rigidTransform.rot = Quaternion.Inverse(Root.rotation) * transform.rotation;
+            if (!PathfinderAvatarTrackers.Root) return;
+            
+            rigidTransform.pos = PathfinderAvatarTrackers.Root.InverseTransformPoint(transform.position);
+            rigidTransform.rot = Quaternion.Inverse(PathfinderAvatarTrackers.Root.rotation) * transform.rotation;
 
             SDKBridgePathfinder.SetValue(path, ref rigidTransform, (int) PathfinderType.RigidTransform);
         }

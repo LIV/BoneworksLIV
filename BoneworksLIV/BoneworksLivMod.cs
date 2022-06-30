@@ -17,6 +17,7 @@ namespace BoneworksLIV
 		private ModSettings modSettings;
 		private Camera spawnedCamera;
 		private static LIV.SDK.Unity.LIV livInstance => LIV.SDK.Unity.LIV.Instance;
+		public static Transform Stage { get; private set; }
 
 		public override void OnApplicationStart()
 		{
@@ -27,7 +28,6 @@ namespace BoneworksLIV
 			ClassInjector.RegisterTypeInIl2Cpp<BodyRendererManager>();
 			ClassInjector.RegisterTypeInIl2Cpp<PathfinderRigidTransform>();
 			ClassInjector.RegisterTypeInIl2Cpp<PathfinderAvatarTrackers>();
-			ClassInjector.RegisterTypeInIl2Cpp<BoneText>();
 			OnCameraReady += SetUpLiv;
 			modSettings = new ModSettings();
 			modSettings.ShowPlayerBody.OnValueChanged += HandleShowPlayerBodyChanged;
@@ -146,11 +146,11 @@ namespace BoneworksLIV
 				Object.Destroy(livObject);
 			}
 
-			var cameraParent = camera.transform.parent;
+			Stage = camera.transform.parent;
 			var cameraPrefab = new GameObject("LivCameraPrefab");
 			cameraPrefab.SetActive(false);
 			cameraPrefab.AddComponent<Camera>();
-			cameraPrefab.transform.SetParent(cameraParent, false);
+			cameraPrefab.transform.SetParent(Stage, false);
 
 			livObject = new GameObject("LIV");
 			livObject.SetActive(false);
@@ -158,7 +158,7 @@ namespace BoneworksLIV
 			var liv = livObject.AddComponent<LIV.SDK.Unity.LIV>();
 			liv.HMDCamera = camera;
 			liv.MRCameraPrefab = cameraPrefab.GetComponent<Camera>();
-			liv.stage = cameraParent;
+			liv.stage = Stage;
 			liv.fixPostEffectsAlpha = true;
 			SetUpPlayerVisibility(liv, modSettings.ShowPlayerBody.Value);
 			livObject.SetActive(true);
