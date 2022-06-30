@@ -12,7 +12,7 @@ namespace BoneworksLIV.AvatarTrackers
 	    private const string globalPathBase = "LIV.avatarTrackers";
 		private static readonly Dictionary<string, string> boneMap = new Dictionary<string, string>()
 		{
-			{ "Neck_01SHJnt", "bob.stage.avatar.trackers.head" }, // other options: Neck_02SHJnt / Neck_TopSHJnt / Head_JawSHJnt / Head_TopSHJnt
+			{ "Head_JawSHJnt", "bob.stage.avatar.trackers.head" }, // other options: Neck_01SHJnt / Neck_02SHJnt / Neck_TopSHJnt / Head_JawSHJnt / Head_TopSHJnt
 			{ "Spine_TopSHJnt", "bob.stage.avatar.trackers.chest" },
 			{ "ROOTSHJnt", "bob.stage.avatar.trackers.waist" },
 			{ "l_Hand_1SHJnt", "bob.stage.avatar.trackers.leftHand" }, // other options:  l_Hand_1SHJnt / l_Hand_2SHJnt / l_GripPoint_AuxSHJnt
