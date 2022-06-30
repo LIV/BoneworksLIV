@@ -137,7 +137,7 @@ namespace BoneworksLIV.AvatarTrackers
         Quaternion = 8,
         Matrix4x4 = 6,
         Vector3 = 30,
-        RigidTransform = 37,
+        RigidTransform = 38,
         Boolean = 42,
         CopyPath = 251,
         Struct = 252
