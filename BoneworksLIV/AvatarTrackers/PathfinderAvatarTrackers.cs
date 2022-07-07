@@ -8,7 +8,7 @@ namespace BoneworksLIV.AvatarTrackers
     {
 	    public static Transform Root { get; private set; }
 	    
-	    private const string localPathBase = "localAvatarTrackers.bob";
+	    private const string localPathBase = "localAvatarTrackers";
 	    private const string globalPathBase = "LIV.avatarTrackers";
 		private static readonly Dictionary<string, string> boneMap = new Dictionary<string, string>()
 		{
@@ -40,14 +40,26 @@ namespace BoneworksLIV.AvatarTrackers
 			{
 				if (boneMap.ContainsKey(child.name))
 				{
-					var rigidTransformSet = child.gameObject.AddComponent<PathfinderRigidTransform>();
-					rigidTransformSet.Key = boneMap[child.name];
-					rigidTransformSet.PathBase = localPathBase;
-					pathfinderRigidTransforms.Add(rigidTransformSet);
+					var pathfinderTransform = new GameObject($"Pathfinder-{child.name}").AddComponent<PathfinderRigidTransform>();
+					pathfinderTransform.transform.SetParent(child.transform, false);
+					pathfinderTransform.Key = boneMap[child.name];
+					pathfinderTransform.PathBase = localPathBase;
+					pathfinderRigidTransforms.Add(pathfinderTransform);
+
+					if (child.name.StartsWith("r_"))
+					{
+						pathfinderTransform.transform.localEulerAngles = new Vector3(0f, -90f, 90f);
+					} else if (child.name.StartsWith("l_"))
+					{
+						pathfinderTransform.transform.localEulerAngles = new Vector3(0f, 90f, 90f);
+					} else if (child.name == "ROOTSHJnt")
+					{
+						pathfinderTransform.transform.localEulerAngles = new Vector3(90f, -90f, 0);
+					}
 				}
 			}
         }
-
+        
         private void Update()
         {
 	        foreach (var pathfinderRigidTransform in pathfinderRigidTransforms)
