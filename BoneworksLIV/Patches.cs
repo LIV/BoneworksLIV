@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using BoneworksLIV.AvatarTrackers;
 using HarmonyLib;
 using RealisticEyeMovements;
 using RootMotion.FinalIK;
 using StressLevelZero.Player;
+using StressLevelZero.Rig;
+using StressLevelZero.VRMK;
 using TMPro;
 using UnityEngine;
 using Valve.VR;
@@ -50,7 +53,7 @@ namespace BoneworksLIV
 					bodyRendererCopyEnabledState.headRenderers.Add(renderer);
 					rendererObject.SetActive(true);
 				}
-				rendererObject.layer = (int) GameLayer.LivOnly;
+				rendererObject.layer = isHeadObject ? (int) GameLayer.LivOnly : (int) GameLayer.Player;
 			}
 
 			__instance.gameObject.AddComponent<PathfinderAvatarTrackers>();
@@ -61,6 +64,21 @@ namespace BoneworksLIV
 		private static void HideHeadEffectsFromLiv(RigEvent __instance)
 		{
 			__instance.gameObject.layer = (int) GameLayer.Player;
+		}
+
+		[HarmonyPostfix]
+		[HarmonyPatch(typeof(BodyVitals), "CalibratePlayerBodyScale", new Type[]{})]
+		[HarmonyPatch(typeof(BodyVitals), "CalibratePlayerBodyScale", typeof(RigManager))]
+		private static void SendPlayerBodyDimensionsToPathFinder(BodyVitals __instance)
+		{
+			// TODO cleanup this, extract to a helper to be used in pathFinderRigidTransformBehaviour too.
+            const string pathBase = "localAvatarTrackers.";
+
+            var height = __instance.realWorldHeight;
+			SDKBridgePathfinder.SetValue($"{pathBase}bob.stage.avatar.height", ref height, (int) PathfinderType.Float);
+			var slzBody = __instance.mngr_Rig.GetComponentInChildren<SLZ_Body>();
+			var armSpan = height * slzBody.arms.armLengthFactor;
+			SDKBridgePathfinder.SetValue($"{pathBase}bob.stage.avatar.armspan", ref armSpan, (int) PathfinderType.Float);
 		}
 	}
 }
