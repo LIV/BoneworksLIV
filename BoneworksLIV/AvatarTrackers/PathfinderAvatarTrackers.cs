@@ -59,7 +59,7 @@ namespace BoneworksLIV.AvatarTrackers
         private PathfinderRigidTransform CreatePathfinderTransform(Transform child, string path)
         {
 	        var pathfinderTransform = new GameObject($"Pathfinder-{child.name}").AddComponent<PathfinderRigidTransform>();
-			pathfinderTransform.transform.SetParent(transform, false);
+			pathfinderTransform.transform.SetParent(child, false);
 			pathfinderTransform.Key = path;
 			pathfinderTransform.PathBase = localPathBase;
 
