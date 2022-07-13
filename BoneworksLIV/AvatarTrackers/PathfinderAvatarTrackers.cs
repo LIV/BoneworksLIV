@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using StressLevelZero.VRMK;
 using UnityEngine;
 
 namespace BoneworksLIV.AvatarTrackers
@@ -10,6 +11,10 @@ namespace BoneworksLIV.AvatarTrackers
 	    
 	    private const string localPathBase = "localAvatarTrackers";
 	    private const string globalPathBase = "LIV.avatarTrackers";
+		private PathfinderRigidTransform toGround;
+		private const string toGroundPath = "bob.stage.toGround";
+		private readonly List<PathfinderRigidTransform> pathfinderRigidTransforms = new List<PathfinderRigidTransform>();
+		private PhysGrounder physGrounder;
 		private static readonly Dictionary<string, string> boneMap = new Dictionary<string, string>()
 		{
 			{ "Head_JawSHJnt", "bob.stage.avatar.trackers.head" }, // other options: Neck_01SHJnt / Neck_02SHJnt / Neck_TopSHJnt / Head_JawSHJnt / Head_TopSHJnt
@@ -25,9 +30,7 @@ namespace BoneworksLIV.AvatarTrackers
 			{ "r_Leg_KneeSHJnt", "bob.stage.avatar.trackers.rightKneeGoal" },
 		};
 
-		private readonly List<PathfinderRigidTransform> pathfinderRigidTransforms = new List<PathfinderRigidTransform>();
-	    
-        public PathfinderAvatarTrackers(IntPtr ptr) : base(ptr)
+		public PathfinderAvatarTrackers(IntPtr ptr) : base(ptr)
 		{
 		}
 
@@ -40,24 +43,38 @@ namespace BoneworksLIV.AvatarTrackers
 			{
 				if (boneMap.ContainsKey(child.name))
 				{
-					var pathfinderTransform = new GameObject($"Pathfinder-{child.name}").AddComponent<PathfinderRigidTransform>();
-					pathfinderTransform.transform.SetParent(child.transform, false);
-					pathfinderTransform.Key = boneMap[child.name];
-					pathfinderTransform.PathBase = localPathBase;
-					pathfinderRigidTransforms.Add(pathfinderTransform);
-
-					if (child.name.StartsWith("r_"))
-					{
-						pathfinderTransform.transform.localEulerAngles = new Vector3(0f, -90f, 90f);
-					} else if (child.name.StartsWith("l_"))
-					{
-						pathfinderTransform.transform.localEulerAngles = new Vector3(0f, 90f, 90f);
-					} else if (child.name == "ROOTSHJnt")
-					{
-						pathfinderTransform.transform.localEulerAngles = new Vector3(90f, -90f, 0);
-					}
+					pathfinderRigidTransforms.Add(CreatePathfinderTransform(child, boneMap[child.name]));
 				}
 			}
+
+			toGround = CreatePathfinderTransform(skeleton, toGroundPath);
+        }
+
+        private void Start()
+        {
+	        // TODO use a better way to find this component.
+	        physGrounder = FindObjectOfType<PhysGrounder>();
+        }
+
+        private PathfinderRigidTransform CreatePathfinderTransform(Transform child, string path)
+        {
+	        var pathfinderTransform = new GameObject($"Pathfinder-{child.name}").AddComponent<PathfinderRigidTransform>();
+			pathfinderTransform.transform.SetParent(transform, false);
+			pathfinderTransform.Key = path;
+			pathfinderTransform.PathBase = localPathBase;
+
+			if (child.name.StartsWith("r_"))
+			{
+				pathfinderTransform.transform.localEulerAngles = new Vector3(0f, -90f, 90f);
+			} else if (child.name.StartsWith("l_"))
+			{
+				pathfinderTransform.transform.localEulerAngles = new Vector3(0f, 90f, 90f);
+			} else if (child.name == "ROOTSHJnt")
+			{
+				pathfinderTransform.transform.localEulerAngles = new Vector3(90f, -90f, 0);
+			}
+
+			return pathfinderTransform;
         }
         
         private void Update()
@@ -66,6 +83,15 @@ namespace BoneworksLIV.AvatarTrackers
 	        {
 		        pathfinderRigidTransform.SetPathfinderValuesLocally();
 	        }
+
+	        // TODO clear the local tree before setting stuff that needs to be unset.
+	        var grounded = physGrounder.isGrounded;
+	        if (grounded)
+	        {
+				toGround.SetPathfinderValuesLocally();
+	        }
+	        // TODO I don't think this is working.
+	        SDKBridgePathfinder.SetValue($"{localPathBase}.bob.stage.isGrounded", ref grounded, (int) PathfinderType.Boolean);
 
 	        SDKBridgePathfinder.CopyPath(globalPathBase, localPathBase);
         }

@@ -10,7 +10,6 @@ namespace BoneworksLIV.AvatarTrackers
         public SDKQuaternion rot;
     }
     
-    
     public class PathfinderRigidTransform: MonoBehaviour
     {
         private SDKRigidTransform rigidTransform;
