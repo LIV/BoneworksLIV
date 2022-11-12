@@ -1,5 +1,6 @@
 ﻿using System;
 using LIV.SDK.Unity;
+using LIV.SDK.Unity.Volumetric.GameSDK;
 using MelonLoader;
 using StressLevelZero.Pool;
 using UnhollowerRuntimeLib;
@@ -24,6 +25,7 @@ namespace BoneworksLIV
 			SetUpLiv();
 			ClassInjector.RegisterTypeInIl2Cpp<LIV.SDK.Unity.LIV>();
 			ClassInjector.RegisterTypeInIl2Cpp<BodyRendererManager>();
+			ClassInjector.RegisterTypeInIl2Cpp<VolumetricGameSDK>();
 			OnCameraReady += SetUpLiv;
 			modSettings = new ModSettings();
 			modSettings.ShowPlayerBody.OnValueChanged += HandleShowPlayerBodyChanged;
@@ -84,11 +86,6 @@ namespace BoneworksLIV
 
 		private static void SetUpLiv()
 		{
-			// Since the mod manager doesn't copy stuff to the game directory,
-			// we're loading the dll manually from the mod directory,
-			// to make sure DllImport works as expected in the LIV SDK.
-			SystemLibrary.LoadLibrary($@"{MelonUtils.BaseDirectory}\Mods\LIVAssets\LIV_Bridge.dll");
-
 			var assetManager = new AssetManager($@"{MelonUtils.BaseDirectory}\Mods\LIVAssets\");
 			var livAssetBundle = assetManager.LoadBundle("liv-shaders");
 			SDKShaders.LoadFromAssetBundle(livAssetBundle);
@@ -157,6 +154,12 @@ namespace BoneworksLIV
 			liv.stage = cameraParent;
 			liv.fixPostEffectsAlpha = true;
 			SetUpPlayerVisibility(liv, modSettings.ShowPlayerBody.Value);
+			
+			var volumetricGameSDK = livObject.AddComponent<VolumetricGameSDK>();
+			volumetricGameSDK.stage = cameraParent;
+			volumetricGameSDK.HMDCamera = cameraPrefab.GetComponent<Camera>();
+			volumetricGameSDK.spectatorLayerMask = camera.cullingMask | 1 << (int) GameLayer.LivOnly;
+
 			livObject.SetActive(true);
 		}
 

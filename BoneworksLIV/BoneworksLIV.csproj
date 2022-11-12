@@ -392,6 +392,13 @@
         <Compile Include="BoneworksLivMod.cs" />
         <Compile Include="BodyRendererManager.cs" />
         <Compile Include="GameLayer.cs" />
+        <Compile Include="LIVPathfinderSDK\SDKPathfinder.cs" />
+        <Compile Include="LIVVolumetricGameSDK\SDKAudioCapture.cs" />
+        <Compile Include="LIVVolumetricGameSDK\SDKVolumetricBridge.cs" />
+        <Compile Include="LIVVolumetricGameSDK\SDKVolumetricRenderer.cs" />
+        <Compile Include="LIVVolumetricGameSDK\SDKVolumetricStructs.cs" />
+        <Compile Include="LIVVolumetricGameSDK\SDKVolumetricUtils.cs" />
+        <Compile Include="LIVVolumetricGameSDK\VolumetricGameSDK.cs" />
         <Compile Include="LIV\LIV.cs" />
         <Compile Include="LIV\SDKBridge.cs" />
         <Compile Include="LIV\SDKFont.cs" />
@@ -427,7 +434,7 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
         <Content Include="Directory.Build.props" />
-        <Content Include="LIVAssets\LIV_Bridge.dll">
+        <Content Include="LIVAssets\*">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
         <Content Include="ModPackageFiles\*" />
