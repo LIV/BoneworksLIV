@@ -69,7 +69,7 @@ namespace LIV.SDK.Unity.Volumetric.GameSDK
         private void OnAudioFilterRead(float[] data, int channels)
         {
             if(SDKAudioCapture.instance != this) return;
-            if (!SDKVolumetricBridge.IsBridgeLoaded()) return;
+            if (!SDKVolumetricBridge.isActive) return;
             // TODO: bridge make sure data does not overflow!
             // Make sure the buffer does not overflow for now!
             Debug.Assert(data.Length < 15000);

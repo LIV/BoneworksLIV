@@ -29,6 +29,11 @@ namespace BoneworksLIV
 			OnCameraReady += SetUpLiv;
 			modSettings = new ModSettings();
 			modSettings.ShowPlayerBody.OnValueChanged += HandleShowPlayerBodyChanged;
+			
+			SystemLibrary.LoadLibrary($@"{MelonUtils.BaseDirectory}\Mods\LIVAssets\LIV_Bridge.dll");
+			
+			// TODO this needs to be loaded from the Plugins folder and added to preladed plugins in globalgamemanagers.
+			// SystemLibrary.LoadLibrary($@"{MelonUtils.BaseDirectory}\Mods\LIVAssets\LIV_VOLCAP.dll");
 		}
 
 		private static void HandleShowPlayerBodyChanged(bool oldShowPlayerBody, bool newShowPlayerBody)
@@ -142,7 +147,8 @@ namespace BoneworksLIV
 			var cameraParent = camera.transform.parent;
 			var cameraPrefab = new GameObject("LivCameraPrefab");
 			cameraPrefab.SetActive(false);
-			cameraPrefab.AddComponent<Camera>();
+			var cameraFromPrefab = cameraPrefab.AddComponent<Camera>();
+			cameraFromPrefab.allowHDR = false;
 			cameraPrefab.transform.SetParent(cameraParent, false);
 
 			livObject = new GameObject("LIV");
@@ -150,14 +156,14 @@ namespace BoneworksLIV
 
 			var liv = livObject.AddComponent<LIV.SDK.Unity.LIV>();
 			liv.HMDCamera = camera;
-			liv.MRCameraPrefab = cameraPrefab.GetComponent<Camera>();
+			liv.MRCameraPrefab = cameraFromPrefab;
 			liv.stage = cameraParent;
 			liv.fixPostEffectsAlpha = true;
 			SetUpPlayerVisibility(liv, modSettings.ShowPlayerBody.Value);
 			
 			var volumetricGameSDK = livObject.AddComponent<VolumetricGameSDK>();
 			volumetricGameSDK.stage = cameraParent;
-			volumetricGameSDK.HMDCamera = cameraPrefab.GetComponent<Camera>();
+			volumetricGameSDK.HMDCamera = cameraFromPrefab;
 			volumetricGameSDK.spectatorLayerMask = camera.cullingMask | 1 << (int) GameLayer.LivOnly;
 
 			livObject.SetActive(true);

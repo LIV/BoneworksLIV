@@ -5,15 +5,58 @@ using LIVPathfinderSDK;
 
 namespace LIV.SDK.Unity.Volumetric.GameSDK
 {
-
     public enum PLUGIN_EVENT : int
     {
         CAPTURE_DEPTH = 1,
         CAPTURE_COLOR = 2,
-        SUBMIT_TO_LIV = 3,
-        UPDATE_LIV_GET_FRAME = 4
+        SUBMIT_TO_LIV = 3
     }
     
+    [StructLayout(LayoutKind.Sequential)]
+    public struct RequestedPose
+    {
+        public int frameID;
+        public int width;
+        public int height;
+        public SDKMatrix4x4 projectionMatrix;
+        public float nearClipPlane;
+        public float farClipPlane;
+        public float verticalFieldOfView;
+        public SDKVector3 cameraPosition;
+        public SDKQuaternion cameraRotation;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct RequestedFrame
+    {
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.Struct, SizeConst = 128)]
+        public RequestedPose[] cameras;
+        public int cameraCount;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct RenderPose
+    {
+        public int frameID;
+        public int width;
+        public int height;
+        public SDKMatrix4x4 projectionMatrix;
+        public float nearClipPlane;
+        public float farClipPlane;
+        public float verticalFieldOfView;
+        public SDKVector3 cameraPosition;
+        public SDKQuaternion cameraRotation;
+        public SDKVector3 cameraLossyScale;
+    }
+
+    [StructLayout(LayoutKind.Sequential)]
+    public struct RenderFrame
+    {
+        [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.Struct, SizeConst = 128)]
+        public RenderPose[] cameras;
+        public int cameraCount;
+    }
+
     public struct SDKCamera
     {
         public SDKPose pose;
@@ -22,166 +65,69 @@ namespace LIV.SDK.Unity.Volumetric.GameSDK
 
     public static class SDKVolumetricBridge
     {
-        private const string DllPath = "LIV_VOLCAP.dll";
-
-        [DllImport(DllPath)]
+        [DllImport("LIV_VOLCAP")]
         public static extern IntPtr GetRenderEventFunc();
 
         // Is bridge loaded
-        [DllImport(DllPath)]
-        public static extern bool IsBridgeLoaded();
+        [DllImport("LIV_VOLCAP")]
+        public static extern bool is_active();
 
         // Initializes the dll
-        [DllImport(DllPath)]
-        public static extern void Create();
+        [DllImport("LIV_VOLCAP")]
+        public static extern void create();
 
         // Cleans the dll
-        [DllImport(DllPath)]
-        public static extern void Release();
+        [DllImport("LIV_VOLCAP")]
+        public static extern void release();
 
-        // Set path
-        [DllImport(DllPath, CharSet = CharSet.Ansi)]
-        public static extern void SetPath([MarshalAs(UnmanagedType.LPStr)] string path);
+        [DllImport("LIV_VOLCAP", CharSet = CharSet.Ansi)]
+        public static extern void set_path([MarshalAs(UnmanagedType.LPStr)] string path);
 
-        const string FRAME_CAMERAS_PATH = "frame.cameras";
-        const string LIV_VOLCAPPOSE_PATH = "LIV.VOLCAPPOSE";
-        static string LIV_VOLCAPPOSE_CAMERAS_PATH = $"{LIV_VOLCAPPOSE_PATH}.cameras";
+        [DllImport("LIV_VOLCAP")]
+        public static extern int get_requested_frame(ref RequestedFrame renderFrame);
 
-        public static bool isActive
-        {
-            get
-            {
-                if(!IsBridgeLoaded()) return false;
-                if (!SDKPathfinder.GetPFValue<int>($"{LIV_VOLCAPPOSE_PATH}.active", out int volcapActive, (int)PathfinderType.Int)) return false;
-                return volcapActive == 1;
-            }
-        }
+        [DllImport("LIV_VOLCAP")]
+        public static extern int submit_rendered_frame(ref RenderFrame renderFrame);
 
-        public static int GetCameraCount()
-        {
-            if (!IsBridgeLoaded())
-            {
-                Debug.LogError("Bridge was not loaded!");
-                return 0;
-            }
+        [DllImport("LIV_VOLCAP", CharSet = CharSet.Ansi)]
+        public static extern void set_frame_metadata([MarshalAs(UnmanagedType.LPStr)] string path);
 
-            if (!SDKPathfinder.GetPFValue<int>($"{LIV_VOLCAPPOSE_PATH}.cameracount", out int cameraCount,
-                (int)PathfinderType.Int)) return 0;
-            return cameraCount;
-        }
+        public const string LIV_VOLCAP_AVATAR_PATH = "avatar";
+        public const string LIV_VOLCAP_GAME_PATH = "game";
 
-        public static bool SetCameraCount(int cameraCount)
-        {
-            if (!IsBridgeLoaded())
-            {
-                Debug.LogError("Bridge was not loaded!");
-                return false;
-            }
-
-            if (!SDKPathfinder.SetPFValue<int>("frame.cameracount", ref cameraCount,
-                (int)PathfinderType.Int)) return false;
-            return true;
-        }
-
-        public static bool SetCamera(int id, SDKCamera camera, SDKVector3 cameraLossyScale)
-        {
-            if (!IsBridgeLoaded())
-            {
-                Debug.LogError("Bridge was not loaded!");
-                return false;
-            }
-            int frameID = Time.frameCount;
-            SDKPathfinder.SetPFValue<int>($"{FRAME_CAMERAS_PATH}.camera{id}.frameid", ref frameID, (int)PathfinderType.Int);
-            SDKPathfinder.SetPFValue<int>($"{FRAME_CAMERAS_PATH}.camera{id}.width", ref camera.resolution.width, (int)PathfinderType.Int);
-            SDKPathfinder.SetPFValue<int>($"{FRAME_CAMERAS_PATH}.camera{id}.height", ref camera.resolution.height, (int)PathfinderType.Int);
-            SDKPathfinder.SetPFValue<SDKMatrix4x4>($"{FRAME_CAMERAS_PATH}.camera{id}.projectionmatrix", ref camera.pose.projectionMatrix, (int)PathfinderType.Matrix4x4);
-            SDKPathfinder.SetPFValue<SDKVector3>($"{FRAME_CAMERAS_PATH}.camera{id}.positionlocal", ref camera.pose.localPosition, (int)PathfinderType.Vector3);
-            SDKPathfinder.SetPFValue<SDKQuaternion>($"{FRAME_CAMERAS_PATH}.camera{id}.rotationlocal", ref camera.pose.localRotation, (int)PathfinderType.Quaternion);
-            SDKPathfinder.SetPFValue<SDKVector3>($"{FRAME_CAMERAS_PATH}.camera{id}.lossyscale", ref cameraLossyScale, (int)PathfinderType.Vector3);
-            SDKPathfinder.SetPFValue<float>($"{FRAME_CAMERAS_PATH}.camera{id}.nearclipplane", ref camera.pose.nearClipPlane, (int)PathfinderType.Float);
-            SDKPathfinder.SetPFValue<float>($"{FRAME_CAMERAS_PATH}.camera{id}.farclipplane", ref camera.pose.farClipPlane, (int)PathfinderType.Float);
-            SDKPathfinder.SetPFValue<float>($"{FRAME_CAMERAS_PATH}.camera{id}.verticalfov", ref camera.pose.verticalFieldOfView, (int)PathfinderType.Float);
-            return true;
-        }
-
-        public static bool GetCameras(ref SDKCamera[] cameras)
-        {
-            if (!IsBridgeLoaded())
-            {
-                Debug.LogError("Bridge was not loaded!");
-                return false;
-            }
-            int cameraCount = GetCameraCount();
-            SDKResolution resolution;
-            
-            cameras = new SDKCamera[cameraCount];
-            for (int i = 0; i < cameraCount; i++)
-            {
-                int poseID = i;
-                SDKPose pose = new SDKPose();
-                string projectionMatrixPath = $"{LIV_VOLCAPPOSE_CAMERAS_PATH}.camera{poseID}.projectionmatrix";
-                if (!SDKPathfinder.GetPFValue<SDKMatrix4x4>(projectionMatrixPath,
-                    out pose.projectionMatrix, (int)PathfinderType.Matrix4x4))
-                {
-                    Debug.LogError($"Cant get value: projectionmatrix from: {projectionMatrixPath}");
-                    pose.projectionMatrix = Matrix4x4.identity;
-                }
-
-                string positionLocalPath = $"{LIV_VOLCAPPOSE_CAMERAS_PATH}.camera{poseID}.positionlocal";
-                if (!SDKPathfinder.GetPFValue<SDKVector3>(positionLocalPath, out pose.localPosition,
-                    (int)PathfinderType.Vector3))
-                {
-                    Debug.LogError($"Cant get value: positionlocal from: {positionLocalPath}");
-                    pose.localPosition = Vector3.zero;
-                }
-
-                string rotationLocalPath = $"{LIV_VOLCAPPOSE_CAMERAS_PATH}.camera{poseID}.rotationlocal";
-                if (!SDKPathfinder.GetPFValue<SDKQuaternion>(rotationLocalPath, out pose.localRotation,
-                    (int)PathfinderType.Quaternion))
-                {
-                    Debug.LogError($"Cant get value: rotationlocal from: {rotationLocalPath}");
-                    pose.localRotation = Quaternion.identity;
-                }
-
-                string nearClipPlanePath = $"{LIV_VOLCAPPOSE_CAMERAS_PATH}.camera{poseID}.nearclipplane";
-                if (!SDKPathfinder.GetPFValue<float>(nearClipPlanePath, out pose.nearClipPlane,
-                    (int)PathfinderType.Float))
-                {
-                    Debug.LogError($"Cant get value: nearclipplane fromt: {nearClipPlanePath}");
-                    pose.nearClipPlane = 0.1f;
-                }
-
-                string farClipPlanePath = $"{LIV_VOLCAPPOSE_CAMERAS_PATH}.camera{poseID}.farclipplane";
-                if (!SDKPathfinder.GetPFValue<float>(farClipPlanePath, out pose.farClipPlane,
-                    (int)PathfinderType.Float))
-                {
-                    Debug.LogError($"Cant get value: farclipplane from: {farClipPlanePath}");
-                    pose.farClipPlane = 1000f;
-                }
-
-                string verticalFovPath = $"{LIV_VOLCAPPOSE_CAMERAS_PATH}.camera{poseID}.verticalfov";
-                if (!SDKPathfinder.GetPFValue<float>(verticalFovPath, out pose.verticalFieldOfView,
-                    (int)PathfinderType.Float))
-                {
-                    Debug.LogError($"Cant get value: verticalfov from: {verticalFovPath}");
-                    pose.verticalFieldOfView = 60f;
-                }
-
-                string widthPath = $"{LIV_VOLCAPPOSE_CAMERAS_PATH}.camera{poseID}.width";
-                SDKPathfinder.GetPFValue<int>(widthPath, out resolution.width,
-                    (int)PathfinderType.Int);
+        public static bool isActive => is_active();
         
-                string heightPath = $"{LIV_VOLCAPPOSE_CAMERAS_PATH}.camera{poseID}.height";
-                SDKPathfinder.GetPFValue<int>(heightPath, out resolution.height,
-                    (int)PathfinderType.Int);
-
-                cameras[i] = new SDKCamera()
-                {
-                    pose = pose,
-                    resolution = resolution
-                };
+        public static bool SetCameras(ref RequestedFrame requestedFrame, CameraSetup[] cameraSetups)
+        {
+            RenderFrame renderFrame = new RenderFrame();
+            renderFrame.cameras = new RenderPose[128];
+            renderFrame.cameraCount = requestedFrame.cameraCount;
+            
+            for (int i = 0; i < requestedFrame.cameraCount; i++)
+            {
+                renderFrame.cameras[i].frameID = Time.frameCount;
+                renderFrame.cameras[i].width = requestedFrame.cameras[i].width;
+                renderFrame.cameras[i].height = requestedFrame.cameras[i].height;
+                renderFrame.cameras[i].projectionMatrix = requestedFrame.cameras[i].projectionMatrix;
+                renderFrame.cameras[i].nearClipPlane = requestedFrame.cameras[i].nearClipPlane;
+                renderFrame.cameras[i].farClipPlane = requestedFrame.cameras[i].farClipPlane;
+                renderFrame.cameras[i].verticalFieldOfView = requestedFrame.cameras[i].verticalFieldOfView;
+                renderFrame.cameras[i].cameraPosition = requestedFrame.cameras[i].cameraPosition;
+                renderFrame.cameras[i].cameraRotation = requestedFrame.cameras[i].cameraRotation;
+                renderFrame.cameras[i].cameraLossyScale = cameraSetups[i].lossyScale;
             }
 
+            if (submit_rendered_frame(ref renderFrame) != 0) return false;
+            return true;
+        }
+
+        public static bool GetRequestedFrame(ref RequestedFrame requestedFrame)
+        {
+            if (requestedFrame.cameras == null || requestedFrame.cameras.Length != 128)
+            {
+                requestedFrame.cameras = new RequestedPose[128];
+            }
+            if (get_requested_frame(ref requestedFrame) != 0) return false;
             return true;
         }
     }

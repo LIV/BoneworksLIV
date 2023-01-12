@@ -10,7 +10,7 @@ namespace LIV.SDK.Unity.Volumetric.GameSDK
 {
 	public class CameraSetup : IDisposable
 	{
-		private int _id;
+		private int _cameraIndex;
 		private SDKVolumetricRenderer _renderer = null;
 		private Camera _cameraInstance;
 		private RenderTexture _colorTexture;
@@ -22,16 +22,18 @@ namespace LIV.SDK.Unity.Volumetric.GameSDK
 		private CommandBuffer _livCaptureColorCommandBuffer;
 		private CameraEvent _captureDepthEvent = CameraEvent.AfterEverything;
 		private CameraEvent _captureColorEvent = CameraEvent.AfterEverything;
+		private Vector3 _lossyScale = Vector3.zero;
+		public Vector3 lossyScale => _lossyScale;
 		
-		public CameraSetup(SDKVolumetricRenderer renderer, int id)
+		public CameraSetup(SDKVolumetricRenderer renderer, int cameraIndex)
 		{
-			_id = id;
+			_cameraIndex = cameraIndex;
 			_renderer = renderer;
 			var cloneGO = Object.Instantiate(_renderer.cameraReference.gameObject, _renderer.stage);
 			_cameraInstance = cloneGO.GetComponent<Camera>();
 			SDKVolumetricUtils.CleanCameraBehaviours(_cameraInstance, _renderer.excludeBehaviours);
 
-			_cameraInstance.name = "Volumetric Camera "+_id;
+			_cameraInstance.name = "Volumetric Camera "+_cameraIndex;
 			if (_cameraInstance.CompareTag("MainCamera"))
 			{
 				_cameraInstance.tag = "Untagged";
@@ -46,55 +48,55 @@ namespace LIV.SDK.Unity.Volumetric.GameSDK
 #if UNITY_5_6_OR_NEWER
             _cameraInstance.allowMSAA = false;
 #endif
-			int internalID = _id * 10;
+			int encodedCameraIndex = _cameraIndex * 10;
 			_livCaptureDepthCommandBuffer = new CommandBuffer();
-			_livCaptureDepthCommandBuffer.name = "LIV.CaptureDepth"+_id;
-			_livCaptureDepthCommandBuffer.IssuePluginEvent(SDKVolumetricBridge.GetRenderEventFunc(), internalID + (int)PLUGIN_EVENT.CAPTURE_DEPTH);
+			_livCaptureDepthCommandBuffer.name = "LIV.CaptureDepth"+_cameraIndex;
+			_livCaptureDepthCommandBuffer.IssuePluginEvent(SDKVolumetricBridge.GetRenderEventFunc(), encodedCameraIndex + (int)PLUGIN_EVENT.CAPTURE_DEPTH);
 			
 			_livCaptureColorCommandBuffer = new CommandBuffer();
-			_livCaptureColorCommandBuffer.name = "LIV.CaptureColor"+_id;
-			_livCaptureColorCommandBuffer.IssuePluginEvent(SDKVolumetricBridge.GetRenderEventFunc(), internalID + (int)PLUGIN_EVENT.CAPTURE_COLOR);
+			_livCaptureColorCommandBuffer.name = "LIV.CaptureColor"+_cameraIndex;
+			_livCaptureColorCommandBuffer.IssuePluginEvent(SDKVolumetricBridge.GetRenderEventFunc(), encodedCameraIndex + (int)PLUGIN_EVENT.CAPTURE_COLOR);
 			
 			_cameraInstance.enabled = false;
 			_cameraInstance.gameObject.SetActive(true);
 		}
 
-		private void UpdateTextures(SDKResolution resolution)
+		private void UpdateTextures(int width, int height)
 		{
 			if (
 				_colorTexture == null ||
-				_colorTexture.width != resolution.width ||
-				_colorTexture.height != resolution.height
+				_colorTexture.width != width ||
+				_colorTexture.height != height
 			)
 			{
-				if (SDKVolumetricUtils.CreateTexture(ref _colorTexture, resolution.width, resolution.height, 24, RenderTextureFormat.ARGB32))
+				if (SDKVolumetricUtils.CreateTexture(ref _colorTexture, width, height, 24, RenderTextureFormat.ARGB32))
 				{
 #if UNITY_EDITOR
-					_colorTexture.name = "LIV.VolumetricColorRenderTexture"+_id;
+					_colorTexture.name = "LIV.VolumetricColorRenderTexture"+_cameraIndex;
 #endif
 				}
 				else
 				{
-					Debug.LogError("LIV: Unable to create volumetric color texture! "+_id);
+					Debug.LogError("LIV: Unable to create volumetric color texture! "+_cameraIndex);
 				}
 			}
 		}
 		
-		public void Render(SDKCamera camera)
+		public void Render(RequestedPose pose)
 		{
-			if (camera.resolution.width < 1 ||
-			    camera.resolution.height < 1)
+			if (pose.width < 1 ||
+			    pose.height < 1)
 			{
-				Debug.LogError($"LIV: Camera: {_id} resolution: {camera.resolution.width}x{camera.resolution.height} is invalid. ");
+				Debug.LogError($"LIV: Camera: {_cameraIndex} resolution: {pose.width}x{pose.height} is invalid. ");
 				return;
 			}
 			
-			UpdateTextures(camera.resolution);
+			UpdateTextures(pose.width, pose.height);
 			if (_colorTexture != null)
 			{
 				_captureDepthEvent = SDKVolumetricUtils.GetCameraEvent(_cameraInstance);
 				_cameraInstance.targetTexture = _colorTexture;
-				SDKVolumetricUtils.SetCamera(_cameraInstance, _cameraInstance.transform, camera.pose, _renderer.localToWorldMatrix, _renderer.spectatorLayerMask);
+				SDKVolumetricUtils.SetCamera(_cameraInstance, _cameraInstance.transform, pose, _renderer.localToWorldMatrix, _renderer.spectatorLayerMask);
 				_cameraInstance.AddCommandBuffer(_captureDepthEvent, _livCaptureDepthCommandBuffer);
 				_cameraInstance.AddCommandBuffer(_captureColorEvent, _livCaptureColorCommandBuffer);
 				_cameraInstance.Render();
@@ -102,7 +104,7 @@ namespace LIV.SDK.Unity.Volumetric.GameSDK
 				_cameraInstance.RemoveCommandBuffer(_captureDepthEvent, _livCaptureDepthCommandBuffer);
 			}
 
-			SDKVolumetricBridge.SetCamera(_id, camera, _cameraInstance.transform.lossyScale);
+			_lossyScale = _cameraInstance.transform.lossyScale;
 		}
 		
 		public void Dispose()
@@ -122,10 +124,8 @@ namespace LIV.SDK.Unity.Volumetric.GameSDK
 	
 	public class SDKVolumetricRenderer : IDisposable
 	{
-		public static string LIV_VOLCAP_PATH = "LIV.VOLCAP";
-
 		private VolumetricGameSDK _volumetricGameSDK = null;
-		private SDKCamera[] _sdkCameras;
+		private RequestedFrame _requestedFrame = new RequestedFrame();
 		
 		public VolumetricGameSDK volumetricGameSDK
 		{
@@ -180,33 +180,23 @@ namespace LIV.SDK.Unity.Volumetric.GameSDK
 		public SDKVolumetricRenderer(VolumetricGameSDK volumetricGameSDK)
 		{
 			_volumetricGameSDK = volumetricGameSDK;
-			SDKVolumetricBridge.SetPath(LIV_VOLCAP_PATH);
-			SDKVolumetricBridge.Create();
+			SDKVolumetricBridge.set_path(SDKVolumetricBridge.LIV_VOLCAP_GAME_PATH);
+			SDKVolumetricBridge.create();
 		}
 
 		public void Render()
 		{
-			GL.IssuePluginEvent(SDKVolumetricBridge.GetRenderEventFunc(), (int)PLUGIN_EVENT.UPDATE_LIV_GET_FRAME);
+			SDKVolumetricBridge.GetRequestedFrame(ref _requestedFrame);
 			
-			SDKVolumetricBridge.GetCameras(ref _sdkCameras);
-			int cameraCount = _sdkCameras.Length;
-			
-			// Clear frame first!
-			//int EMPTY_FRAME = 262148;
-			//SDKBridge.SetValue<int>($"frame", ref EMPTY_FRAME, (int)0);
-			
-			// Set camera count
-			SDKVolumetricBridge.SetCameraCount(cameraCount);
-
-			if (_sdkCameras == null || _sdkCameras.Length == 0)
+			if (_requestedFrame.cameraCount <= 0)
 			{
 				DestroyCameras();
 			}
 
-			if (_cameraSetups == null || _cameraSetups.Length != _sdkCameras.Length)
+			if (_cameraSetups == null || _cameraSetups.Length != _requestedFrame.cameraCount)
 			{
 				DestroyCameras();
-				_cameraSetups = new CameraSetup[_sdkCameras.Length];
+				_cameraSetups = new CameraSetup[_requestedFrame.cameraCount];
 				for (int i = 0; i < _cameraSetups.Length; i++)
 				{
 					_cameraSetups[i] = new CameraSetup(this, i);
@@ -216,8 +206,10 @@ namespace LIV.SDK.Unity.Volumetric.GameSDK
 			InvokePreRender();
 			for (int i = 0; i < _cameraSetups.Length; i++)
 			{
-				_cameraSetups[i].Render(_sdkCameras[i]);
+				_cameraSetups[i].Render(_requestedFrame.cameras[i]);
 			}
+			
+			SDKVolumetricBridge.SetCameras(ref _requestedFrame, _cameraSetups);
 			IvokePostRender();
 			
 			// Submit to LIV
@@ -251,7 +243,7 @@ namespace LIV.SDK.Unity.Volumetric.GameSDK
 		public void Dispose()
 		{
 			DestroyCameras();
-			SDKVolumetricBridge.Release();
+			SDKVolumetricBridge.release();
 		}
 	}
 }

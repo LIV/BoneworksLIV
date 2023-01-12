@@ -64,17 +64,22 @@ namespace LIV.SDK.Unity.Volumetric.GameSDK
             EXCLUDE_BEHAVIOURS = 8,
             AUDIO_LISTENER = 16,
         }
-
+        
+        /// <summary>
+        /// triggered when the LIV SDK is about to submit frame data.
+        /// </summary>
+        public static System.Action<string> onSerializeFrameMetadata = null;
+        
         /// <summary>
         /// triggered when the LIV SDK is activated by the LIV App and enabled by the game.
         /// </summary>
         public System.Action onActivate = null;        
         /// <summary>
-        /// triggered before the Mixed Reality camera is about to render.
+        /// triggered before the Volumetric capture camera is about to render.
         /// </summary>
         public System.Action<SDKVolumetricRenderer> onPreRender = null;
         /// <summary>
-        /// triggered after the Mixed Reality camera has finished rendering.
+        /// triggered after the Volumetric capture camera has finished rendering.
         /// </summary>
         public System.Action<SDKVolumetricRenderer> onPostRender = null;
         /// <summary>

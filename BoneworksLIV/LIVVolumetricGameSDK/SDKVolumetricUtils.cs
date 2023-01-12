@@ -110,10 +110,10 @@ namespace LIV.SDK.Unity.Volumetric.GameSDK
             }
         }
 
-        public static void GetCameraPositionAndRotation(SDKPose pose, Matrix4x4 originLocalToWorldMatrix, out Vector3 position, out Quaternion rotation)
+        public static void GetCameraPositionAndRotation(RequestedPose pose, Matrix4x4 originLocalToWorldMatrix, out Vector3 position, out Quaternion rotation)
         {
-            position = originLocalToWorldMatrix.MultiplyPoint(pose.localPosition);
-            rotation = RotateQuaternionByMatrix(originLocalToWorldMatrix, pose.localRotation);
+            position = originLocalToWorldMatrix.MultiplyPoint(pose.cameraPosition);
+            rotation = RotateQuaternionByMatrix(originLocalToWorldMatrix, pose.cameraRotation);
         }
 
         public static void CleanCameraBehaviours(Camera camera, string[] excludeBehaviours)
@@ -131,7 +131,7 @@ namespace LIV.SDK.Unity.Volumetric.GameSDK
             }
         }
 
-        public static void SetCamera(Camera camera, Transform cameraTransform, SDKPose pose, Matrix4x4 originLocalToWorldMatrix, int layerMask)
+        public static void SetCamera(Camera camera, Transform cameraTransform, RequestedPose pose, Matrix4x4 originLocalToWorldMatrix, int layerMask)
         {
             Vector3 worldPosition = Vector3.zero;
             Quaternion worldRotation = Quaternion.identity;

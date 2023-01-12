@@ -43,31 +43,31 @@ namespace LIVPathfinderSDK
     public static class SDKPathfinder
     {
         #region Interop
-        [DllImport("LIV_Bridge.dll", EntryPoint = "LivSDKSet")]
+        [DllImport("LIV_Bridge", EntryPoint = "LivSDKSet")]
         [SuppressUnmanagedCodeSecurity]
         private static extern int SetPFValue(string path, IntPtr value, int valuelength, int valuetype);
 
-        //[DllImport("LIV_Bridge.dll", EntryPoint = "LivSDKSet")]
+        //[DllImport("LIV_Bridge", EntryPoint = "LivSDKSet")]
         //[SuppressUnmanagedCodeSecurity]
         //private static extern int PFSetVect3(string path, [In,Out] vect3 value, int valuelength, int valuetype);
 
-        [DllImport("LIV_Bridge.dll", EntryPoint = "LivSDKGet")]
+        [DllImport("LIV_Bridge", EntryPoint = "LivSDKGet")]
         [SuppressUnmanagedCodeSecurity]
         private static extern int PFGetValue(string path, IntPtr value, int valuelength, int valuetype);
 
-        //[DllImport("LIV_Bridge.dll", EntryPoint = "LivSDKGet")]
+        //[DllImport("LIV_Bridge", EntryPoint = "LivSDKGet")]
         //[SuppressUnmanagedCodeSecurity]
         //private static extern int PFGetVect3(string path, [In,Out] vect3 value, int valuelength, int valuetype);
 
-        [DllImport("LIV_Bridge.dll", EntryPoint = "NJSet")]
+        [DllImport("LIV_Bridge", EntryPoint = "NJSet")]
         [SuppressUnmanagedCodeSecurity]
         public static extern int PFSet(IntPtr nj, string path, IntPtr value, int valuelength, int valuetype);
 
-        [DllImport("LIV_Bridge.dll", EntryPoint = "NJGet")]
+        [DllImport("LIV_Bridge", EntryPoint = "NJGet")]
         [SuppressUnmanagedCodeSecurity]
         public static extern int PFGet(IntPtr nj, string path, IntPtr value, int valuelength, int valuetype);
 
-        [DllImport("LIV_Bridge.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("LIV_Bridge", CallingConvention = CallingConvention.Cdecl)]
         [SuppressUnmanagedCodeSecurity]
         public static extern IntPtr PFGetSmall(IntPtr nj, string path, int type);
 
