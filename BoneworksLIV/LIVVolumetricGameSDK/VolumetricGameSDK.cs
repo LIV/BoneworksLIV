@@ -406,6 +406,7 @@ namespace LIV.SDK.Unity.Volumetric.GameSDK
         void OnSDKActivate()
         {
             Debug.Log("LIV VolumetricCapture: Compositor connected, setting up Volumetric Capture!");
+            SubmitSDKOutput();
             CreateAssets();
             StartRenderCoroutine();
             _isActive = true;
@@ -456,6 +457,19 @@ namespace LIV.SDK.Unity.Volumetric.GameSDK
                 MelonCoroutines.Stop(_waitForEndOfFrameCoroutine);
                 _waitForEndOfFrameCoroutine = null;
             }
+        }
+
+        void SubmitSDKOutput()
+        {
+            ApplicationOutput output = new ApplicationOutput();
+            output.sdkID = SDKConstants.SDK_ID;
+            output.sdkVersion = SDKConstants.SDK_VERSION;
+            output.engineName = SDKConstants.ENGINE_NAME;
+            output.engineVersion = Application.unityVersion;
+            output.applicationName = Application.productName;
+            output.applicationVersion = Application.version;
+            output.graphicsAPI = SystemInfo.graphicsDeviceType.ToString();
+            SDKVolumetricBridge.set_application_output(ref output);
         }
 
         void Invalidate()

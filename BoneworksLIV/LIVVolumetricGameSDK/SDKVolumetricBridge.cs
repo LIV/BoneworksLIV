@@ -57,10 +57,23 @@ namespace LIV.SDK.Unity.Volumetric.GameSDK
         public int cameraCount;
     }
 
-    public struct SDKCamera
+    [StructLayout(LayoutKind.Sequential)]
+    public struct ApplicationOutput
     {
-        public SDKPose pose;
-        public SDKResolution resolution;
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string engineName;
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string engineVersion;
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string applicationName;
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string applicationVersion;
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string graphicsAPI;
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string sdkID;
+        [MarshalAs(UnmanagedType.LPStr)]
+        public string sdkVersion;
     }
 
     public static class SDKVolumetricBridge
@@ -79,6 +92,9 @@ namespace LIV.SDK.Unity.Volumetric.GameSDK
         // Cleans the dll
         [DllImport("LIV_VOLCAP")]
         public static extern void release();
+
+        [DllImport("LIV_VOLCAP")]
+        public static extern void set_application_output(ref ApplicationOutput applicationOutput);
 
         [DllImport("LIV_VOLCAP", CharSet = CharSet.Ansi)]
         public static extern void set_path([MarshalAs(UnmanagedType.LPStr)] string path);

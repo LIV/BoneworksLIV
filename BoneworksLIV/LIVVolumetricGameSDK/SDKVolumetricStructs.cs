@@ -6,7 +6,7 @@ namespace LIV.SDK.Unity.Volumetric.GameSDK
 {
     public struct SDKConstants
     {
-        public const string SDK_ID = "##############################";
+        public const string SDK_ID = "L9IBZ59GZQXBLQ6IYTBV8AXX4NGDYCQ0";
         public const string SDK_VERSION = "1.5.4";
         public const string ENGINE_NAME = "unity";
     }
@@ -500,50 +500,6 @@ string.Format(@"Matrix4x4:
     }
 
     [StructLayout(LayoutKind.Sequential)]
-    public struct SDKApplicationOutput
-    {
-        public string engineName;
-        public string engineVersion;
-        public string applicationName;
-        public string applicationVersion;
-        public string xrDeviceName;
-        public string graphicsAPI;
-        public string sdkID;
-        public string sdkVersion;
-
-        public static SDKApplicationOutput empty {
-            get {
-                return new SDKApplicationOutput()
-                {
-                    engineName = string.Empty,
-                    engineVersion = string.Empty,
-                    applicationName = string.Empty,
-                    applicationVersion = string.Empty,
-                    xrDeviceName = string.Empty,
-                    graphicsAPI = string.Empty,
-                    sdkID = SDKConstants.SDK_ID,
-                    sdkVersion = string.Empty
-                };
-            }
-        }
-
-        public override string ToString()
-        {
-            return
-string.Format(@"SDKApplicationOutput:
-engineName: {0}
-engineVersion: {1}
-applicationName: {2}
-applicationVersion: {3}
-xrDeviceName: {4}
-graphicsAPI: {5}
-sdkID: {6}
-sdkVersion: {7}",
-    engineName, engineVersion, applicationName, applicationVersion, xrDeviceName, graphicsAPI, sdkID, sdkVersion);
-        }
-    }
-
-    [StructLayout(LayoutKind.Sequential)]
     public struct SDKOutputFrame
     {
         public RENDERING_PIPELINE renderingPipeline;
@@ -696,7 +652,6 @@ farClipPlane: {5}",
     projectionMatrix, localPosition, localRotation, verticalFieldOfView, nearClipPlane, farClipPlane);
         }
     }
-    
     
     [StructLayout(LayoutKind.Sequential)]
     public struct SDKAudioFrame
