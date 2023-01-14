@@ -6,6 +6,6 @@
             If you installed MelonLoader using a mod manager like r2modman, this would be your profile directory.
             If you installed MelonLoader manually or using the MelonLoader installer, this would usually be the game dctory.
         -->
-        <MelonLoaderBaseDir>C:\Users\rai\AppData\Roaming\r2modmanPlus-local\BONEWORKS\profiles\Default</MelonLoaderBaseDir>
+        <MelonLoaderBaseDir>D:\SteamLibrary\steamapps\common\BONEWORKS\BONEWORKS</MelonLoaderBaseDir>
     </PropertyGroup>
 </Project>
