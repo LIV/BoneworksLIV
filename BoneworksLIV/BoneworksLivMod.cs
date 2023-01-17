@@ -33,11 +33,10 @@ namespace BoneworksLIV
 			modSettings.ShowPlayerBody.OnValueChanged += HandleShowPlayerBodyChanged;
 			
 			SystemLibrary.LoadLibrary($@"{MelonUtils.BaseDirectory}\Mods\LIVAssets\LIV_Bridge.dll");
-			// var ptr = SystemLibrary.LoadLibrary($@"{MelonUtils.BaseDirectory}\Mods\LIVAssets\LIV.WasapiCapture.dll");
-			// MelonLogger.Msg($"## PTR is {ptr}");
-			
-			// TODO this needs to be loaded from the Plugins folder and added to preladed plugins in globalgamemanagers.
+
+			// TODO these need to be loaded from the Plugins folder and added to preladed plugins in globalgamemanagers.
 			// SystemLibrary.LoadLibrary($@"{MelonUtils.BaseDirectory}\Mods\LIVAssets\LIV_VOLCAP.dll");
+			// SystemLibrary.LoadLibrary($@"{MelonUtils.BaseDirectory}\Mods\LIVAssets\Wasapiwhatever.dll");
 		}
 
 		private static void HandleShowPlayerBodyChanged(bool oldShowPlayerBody, bool newShowPlayerBody)

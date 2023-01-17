@@ -55,9 +55,6 @@ namespace LIV
         void ProcessAudio(float[] audioData)
         {
             _audioData = audioData;
-            //TODO do something here with the audio
-            MelonLogger.Msg($"Received audio data {audioData.Length}");
-            
             SDKPathfinder.SetPFValue("LIV.audio", ref audioData, audioData.Length);
         }
 
