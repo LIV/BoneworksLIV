@@ -1,4 +1,5 @@
 ﻿using System;
+using LIV;
 using LIV.SDK.Unity;
 using LIV.SDK.Unity.Volumetric.GameSDK;
 using MelonLoader;
@@ -26,11 +27,14 @@ namespace BoneworksLIV
 			ClassInjector.RegisterTypeInIl2Cpp<LIV.SDK.Unity.LIV>();
 			ClassInjector.RegisterTypeInIl2Cpp<BodyRendererManager>();
 			ClassInjector.RegisterTypeInIl2Cpp<VolumetricGameSDK>();
+			ClassInjector.RegisterTypeInIl2Cpp<WasapiCapture>();
 			OnCameraReady += SetUpLiv;
 			modSettings = new ModSettings();
 			modSettings.ShowPlayerBody.OnValueChanged += HandleShowPlayerBodyChanged;
 			
 			SystemLibrary.LoadLibrary($@"{MelonUtils.BaseDirectory}\Mods\LIVAssets\LIV_Bridge.dll");
+			// var ptr = SystemLibrary.LoadLibrary($@"{MelonUtils.BaseDirectory}\Mods\LIVAssets\LIV.WasapiCapture.dll");
+			// MelonLogger.Msg($"## PTR is {ptr}");
 			
 			// TODO this needs to be loaded from the Plugins folder and added to preladed plugins in globalgamemanagers.
 			// SystemLibrary.LoadLibrary($@"{MelonUtils.BaseDirectory}\Mods\LIVAssets\LIV_VOLCAP.dll");
@@ -165,6 +169,8 @@ namespace BoneworksLIV
 			volumetricGameSDK.stage = cameraParent;
 			volumetricGameSDK.HMDCamera = cameraFromPrefab;
 			volumetricGameSDK.spectatorLayerMask = camera.cullingMask | 1 << (int) GameLayer.LivOnly;
+
+			livObject.AddComponent<WasapiCapture>();
 
 			livObject.SetActive(true);
 		}

@@ -413,6 +413,7 @@
         <Compile Include="Patches.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
         <Compile Include="SystemLibrary.cs" />
+        <Compile Include="WasapiCapture.cs" />
     </ItemGroup>
     <ItemGroup>
         <EmbeddedResource Include="..\BoneworksLivUnity\AssetBundles\liv-shaders">
