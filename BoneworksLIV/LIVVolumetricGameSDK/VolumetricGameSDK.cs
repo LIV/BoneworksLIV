@@ -217,7 +217,7 @@ namespace LIV.SDK.Unity.Volumetric.GameSDK
                 
                 if (_audioListener != value)
                 {
-                    _audioListener = value;
+                    _audioListenerCandidate = value;
                     _invalidate = (INVALIDATION_FLAGS)SDKVolumetricUtils.SetFlag((uint)_invalidate, (uint)INVALIDATION_FLAGS.AUDIO_LISTENER, true);
                 }
             }
