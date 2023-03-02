@@ -1,11 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project>
     <PropertyGroup>
-        <!--
-            MelonLoaderBaseDir is the directory that contains all the MelonLoader directories and files.
-            If you installed MelonLoader using a mod manager like r2modman, this would be your profile directory.
-            If you installed MelonLoader manually or using the MelonLoader installer, this would usually be the game dctory.
-        -->
-        <MelonLoaderBaseDir>D:\SteamLibrary\steamapps\common\BONEWORKS\BONEWORKS</MelonLoaderBaseDir>
+        <GamePath>D:\SteamLibrary\steamapps\common\BONEWORKS\BONEWORKS</GamePath>
     </PropertyGroup>
 </Project>

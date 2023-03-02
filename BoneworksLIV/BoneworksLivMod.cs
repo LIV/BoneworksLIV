@@ -19,9 +19,9 @@ namespace BoneworksLIV
 		private Camera spawnedCamera;
 		private static LIV.SDK.Unity.LIV livInstance => LIV.SDK.Unity.LIV.Instance;
 
-		public override void OnApplicationStart()
+		public override void OnInitializeMelon()
 		{
-			base.OnApplicationStart();
+			base.OnInitializeMelon();
 
 			SetUpLiv();
 			ClassInjector.RegisterTypeInIl2Cpp<LIV.SDK.Unity.LIV>();

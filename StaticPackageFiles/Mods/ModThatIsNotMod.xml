@@ -1,0 +1,558 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ModThatIsNotMod</name>
+    </assembly>
+    <members>
+        <member name="M:ModThatIsNotMod.BoneMenu.DefaultMenu.CreateDefaultElements">
+            <summary>
+            Add some default options to the menu that will be useful to most people
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.BoneMenu.DefaultMenu.SpawnRandomCustomItem">
+            <summary>
+            Gets a random non-magazine custom item and spawns it in front of the player
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.BoneMenu.EnumElement.GetNextValue">
+            <summary>
+            Returns the next element of the enum, or the first if it needs to loop back
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.BoneMenu.GenericElement`1.SetValue(`0)">
+            <summary>
+            By default assigns the value and updates the text on the button
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.BoneMenu.GenericElement`1.UpdateUiText">
+            <summary>
+            By default sets the text to "Display Text: Value"
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.BoneMenu.IntElement.OnLeftInputPressed">
+            <summary>
+            Decrements the value and optionally invokes the action
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.BoneMenu.IntElement.OnRightInputPressed">
+            <summary>
+            Increments the value and optionally invokes the action
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.BoneMenu.MenuCategory.RemoveElement(System.String)">
+            <summary>
+            Removes any elements with matching display text
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.BoneMenu.MenuCategory.AddElement(ModThatIsNotMod.BoneMenu.MenuElement)">
+            <summary>
+            Built in types have a dedicated function to create and add at the same time but this way if you make a new button type you can still add it.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.BoneMenu.MenuElement.UpdateUiText">
+            <summary>
+            Most types of elements should override this to include their value.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.BoneMenu.MenuElement.SetFontSize(System.Single)">
+            <summary>
+            The default font size is automatically picked between 0.2f and 0.1f.
+            Only change it if you really need to.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.BoneMenu.MenuElement.AssignComponentReferences(UnityEngine.GameObject,TMPro.TextMeshProUGUI,UnityEngine.UI.Image)">
+            <summary>
+            Called whenever a button for this element is created.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.BoneMenu.MenuElementInputManager.SetupCollidersAndText(ModThatIsNotMod.BoneMenu.UiElementType)">
+            <summary>
+            I'm not even gonna try to explain how this works because I didn't bother to comment when I was making it and now I don't really remember.
+            Basically just don't mess with it.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.BoneMenu.MenuManager.SetHeldItemMenuEnabled(System.Boolean,StressLevelZero.Interaction.Grip,StressLevelZero.Interaction.Hand)">
+            <summary>
+            Pretty sure L4rs did this stuff I don't understand it
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.BoneMenu.MenuManager.CreateItemMenu(StressLevelZero.Interaction.Interactable,UnityEngine.Transform,ModThatIsNotMod.BoneMenu.MenuCategory,System.Boolean)">
+            <summary>
+            More L4rs stuff I think
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.BoneMenu.MenuManager.FollowPlayer">
+            <summary>
+            Just moves the menu to follow the hand of the player
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.BoneMenu.MenuManager.OnBodyBlenderBonesFilled(StressLevelZero.VRMK.SLZ_BodyBlender)">
+            <summary>
+            Used in harmony patch to fix a compatibility issue with player models
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.BoneMenu.MenuManager.IsHandInOpenMenuPose(StressLevelZero.Interaction.Hand)">
+            <summary>
+            Checks if the hand is rotated the right way for the menu to open.
+            Palm should face up, with the fingers pointing away from the player and slightly down.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.BoneMenu.MenuManager.IsHandInCloseMenuPose(StressLevelZero.Interaction.Hand)">
+            <summary>
+            Checks if the hand is rotated correctly to close the menu.
+            The hand should be palm down, with the fingers away from the player and slightly up (or maybe down idr it's just muscle memory at this point).
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.EmbeddedMod.OnAssemblyLoaded">
+            <summary>
+            Runs when the assembly is loaded from the .melon file.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Internals.AmmoPouchGrabbing.OnSpawnGrabPostfix(StressLevelZero.Interaction.Hand)">
+            <summary>
+            Checks if the grabbed mag is the right one for the currently held gun.
+            If it's correct, leaves it. Otherwise it instantiates the right mag and grabs it.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Internals.AmmoPouchGrabbing.CleanupMags">
+            <summary>
+            Every 10 seconds, removes all custom mags that are more than 1m from the players head and not held or in a gun.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Internals.GunModifiersController.RegisterGun(ModThatIsNotMod.MonoBehaviours.SimpleGunModifiers)">
+            <summary>
+            Saves the gun modifiers to be accessed later
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Internals.GunModifiersController.PreFireGun(StressLevelZero.Props.Weapons.Gun)">
+            <summary>
+            Stops the gun from firing if it needs to be charged or the player doesn't have enough extra ammo (for guns that use more than 1 per shot)
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Internals.GunModifiersController.CheckChargeStatus(ModThatIsNotMod.MonoBehaviours.SimpleGunModifiers,StressLevelZero.Props.Weapons.Gun)">
+            <summary>
+            Returns true if the gun is fully charged or doesn't use charging, false otherwise
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Internals.GunModifiersController.CheckAmmoCountStatus(ModThatIsNotMod.MonoBehaviours.SimpleGunModifiers)">
+            <summary>
+            Checks that the player has enough ammo to fire the gun
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Internals.GunModifiersController.PreOnFireGun(StressLevelZero.Props.Weapons.Gun)">
+            <summary>
+            Determines the type of muzzle flash to use
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Internals.GunModifiersController.SpawnMuzzleFlarePrefix(UnityEngine.Vector3,UnityEngine.Quaternion,StressLevelZero.Pool.PoolSpawner.MuzzleFlareType)">
+            <summary>
+            Spawns the correct muzzle flash type
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Internals.GunModifiersController.OnCompleteSlidePull(StressLevelZero.Props.Weapons.Gun)">
+            <summary>
+            Stops the slide from locking back if that's been disabled on the gun
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Internals.GunModifiersController.EjectCartridgePrefix(StressLevelZero.Props.Weapons.Gun)">
+            <summary>
+            Determines the ejected cartridge scale
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Internals.GunModifiersController.OnCaseEjectSpawned(StressLevelZero.Pool.CaseEject)">
+            <summary>
+            Sets the scale of the ejected cartridge
+            </summary>
+        </member>
+        <member name="T:ModThatIsNotMod.Internals.HookingHelpers">
+            <summary>
+            For some patches that are needed on multiple scripts
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Internals.InfiniteAmmoGuns.CheckForInfiniteAmmoVersion(UnityEngine.GameObject,System.String,StressLevelZero.Data.CategoryFilters,StressLevelZero.Pool.PoolMode,System.Int32,System.Boolean)">
+            <summary>
+            Adds a new version of the gun with inifinite ammo to the spawn menu if the name is in the modprefs array
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Internals.ShellLoadingController.PostOnPlugLocked(StressLevelZero.Interaction.MagazineSocket)">
+            <summary>
+            Disables the renderers and colliders on the magazine and ejects it.
+            This way it looks like the shell was loaded but the mag socket is still empty so you can put another in.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Internals.ShellLoadingController.PreFireGun(StressLevelZero.Props.Weapons.Gun)">
+            <summary>
+            Stops the gun from firing if there are no shells and plays the dry fire sound.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Internals.ShellLoadingController.PrePullCartridge(StressLevelZero.Props.Weapons.Gun)">
+            <summary>
+            Doesn't let the gun load a cartridge unless shells have been put in.
+            This is needed since technically all shell loading guns have infinite ammo.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Internals.ShellLoadingController.OnCaseEjectSpawned(StressLevelZero.Pool.CaseEject)">
+            <summary>
+            Hides ejected shells in some circumstances, because the gun will have infinite ammo.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Internals.ShellLoadingController.UpdateArtPostfix(StressLevelZero.Props.Weapons.Gun)">
+            <summary>
+            Hides the chambered bullet in the gun unless the player has put a shell in.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Internals.GunSlideFixes.OnCompleteSlidePull(StressLevelZero.Props.Weapons.Gun)">
+            <summary>
+            Makes guns always play the slide release sound
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Internals.GunSlideFixes.OnSlideRelease(StressLevelZero.SFX.GunSFX)">
+            <summary>
+            Locks the pump on shotguns if there's a round chambered
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Internals.GunSlideFixes.OnPostFireGun(StressLevelZero.Props.Weapons.Gun)">
+            <summary>
+            Resets pump slide distances so they can be moved again after firing.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Internals.GunSlideFixes.PreAttachedToHand(StressLevelZero.Interaction.PumpSlideGrip)">
+            <summary>
+            Reset the pump slide distance when you grab it DEFINITELY NOT BECAUSE STUFF BREAKS OTHERWISE THIS IS A 100% INTENDED FEATURE
+            </summary>
+        </member>
+        <member name="T:ModThatIsNotMod.Internals.WarningSilencers">
+            <summary>
+            Makes the unhollower shut up about unsupported return types and parameters because those messages are annoying.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Internals.ItemLoading.LoadMelons(System.Boolean)">
+            <summary>
+            Finds and loads every .melon file in CustomItems and its subfolders. Logs info about success and failures.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Internals.ItemLoading.ReloadMelons">
+            <summary>
+            Unloads all custom items, removes (hopefully) all references to them, and loads the .melons again
+            Doesn't reload embedded assemblies since that would require cross appdomain reference fuckery
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Internals.ItemLoading.GetLoadedMelon(System.String)">
+            <summary>
+            Finds a LoadedMelonData with the same file path
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Internals.ItemLoading.DeleteLoadedMelon(System.String)">
+            <summary>
+            Deletes any LoadedMelonData's with the same file path
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Internals.ItemLoading.LoadMelon(System.String)">
+            <summary>
+            Loads the asset bundle and adds all items in it to the spawn menu.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Internals.ItemLoading.LoadItemsFromMelon(UnityEngine.GameObject,LocalizedText)">
+            <summary>
+            Finds the settings for each item and creates a spawnable object with them.
+            Adds the items to the spawn menu unless they're marked as hidden.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Internals.ItemLoading.LoadAssemblyFromMelon(System.Byte[],System.String)">
+            <summary>
+            Loads the assembly from bytes, logs a warning, registers the monobehaviours, and starts the embedded mod controller
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Internals.ItemLoading.SetAudioMixers(UnityEngine.GameObject)">
+            <summary>
+            Sets the audio mixers of the some common scripts on the item to the ingame ones
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Internals.ItemLoading.GetMelonFilePaths(System.String)">
+            <summary>
+            Recursively finds all .melon files in the given path.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Internals.ItemLoading.CreateDirectories">
+            <summary>
+            Creates the CustomItems and ExportedAssemblies folders in UserData. I really shouldn't need to have this since people can just take about 10 seconds to make it manually themselves but noooo that's too much effort and there might be something "special" about it. Like what does that even mean??? It's a folder, what on earth could possibly be so special about it that they can't just make it themselves?
+            </summary>
+        </member>
+        <member name="T:ModThatIsNotMod.Internals.ItemSettings">
+            <summary>
+            This data will be set in the Custom Items SDK.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Internals.ItemSettings.TryGetItem(System.String,ModThatIsNotMod.Internals.ItemSettings.Item@)">
+            <summary>
+            Searches for an item with the given name.
+            </summary>
+            <returns>True if the item is found.</returns>
+        </member>
+        <member name="M:ModThatIsNotMod.AssetBundles.LoadFromUserData(System.String,UnityEngine.AssetBundle@)">
+            <summary>
+            Loads the AssetBundle from UserData.
+            </summary>
+            <param name="file">The name/local path of the file.</param>
+            <returns>True if the bundle isn't null.</returns>
+        </member>
+        <member name="M:ModThatIsNotMod.Audio.GetAudioMixers">
+            <summary>
+            Finds the music and sfx audio mixers.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Legacy.LegacyItemLoading.LoadItemsFromMelon(UnityEngine.GameObject)">
+            <summary>
+            Finds the settings for each item and creates a spawnable object with them.
+            Adds the items to the spawn menu unless they're marked as hidden.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Legacy.LegacyItemLoading.GetItemSettings(UnityEngine.GameObject,UnityEngine.GameObject)">
+            <summary>
+            Finds the settings for the given item.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Legacy.LegacyItemLoading.GetHideInMenu(UnityEngine.Transform)">
+            <summary>
+            Gets if the item is hidden.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Legacy.LegacyItemLoading.GetPoolAmount(UnityEngine.Transform)">
+            <summary>
+            Gets the size of the item pool.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Legacy.LegacyItemLoading.GetCategory(UnityEngine.Transform)">
+            <summary>
+            Gets the category of the item.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.MiniMods.BetterMagEject.EjectEmptyMags">
+            <summary>
+            Tries to eject mags if they're empty a few times each second.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.MiniMods.BetterMagEject.EjectMags">
+            <summary>
+            Trys to eject the magazine if the input button was pressed.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.MiniMods.BetterMagEject.UpdateInputValues">
+            <summary>
+            Checks for which buttons have been pressed.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.MiniMods.BetterMagEject.TryEjectMagazine(StressLevelZero.Props.Weapons.Gun,System.Boolean)">
+            <summary>
+            Ejects the magazine if the gun is out of ammo or the button was pressed.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.MiniMods.RadialMenuEverywhere.OnSceneWasInitialized(System.Int32)">
+            <summary>
+            Adds ammo spawnables to the spawn menu and enables the util gun radial button.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.MiniMods.RadialMenuEverywhere.SpawnUtilGun(System.Single)">
+            <summary>
+            Instantiates the utility gun in front of the player.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.MiniMods.RadialMenuEverywhere.SpawnNimbusGun(System.Single)">
+            <summary>
+            Instantiates the nimbus gun in front of the player.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.CustomItems.GetCustomSpawnable(System.String)">
+            <summary>
+            Returns the spawnable object for the custom item.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.CustomItems.GetCustomGameObject(System.String)">
+            <summary>
+            Returns a new instance of the custom item.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.CustomItems.GetCustomItemInstances(System.String,System.Boolean)">
+            <summary>
+            Get an array of all custom items with the same name.
+            TODO: Test this
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.CustomItems.CreateSpawnableObject(UnityEngine.GameObject,System.String,StressLevelZero.Data.CategoryFilters,StressLevelZero.Pool.PoolMode,System.Int32,System.Boolean,System.Boolean)">
+            <summary>
+            Creates a new SpawnableObject with the given data, stops the GameObject from being unloaded, and optionally registers a pool for the new SpawnableObject.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.CustomItems.FixObjectShaders(UnityEngine.GameObject)">
+            <summary>
+            Replaces all dummy and missing shaders with real ones.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.CustomItems.RecreatePools">
+            <summary>
+            Registers pools for all custom spawnables.
+            </summary>
+        </member>
+        <member name="T:ModThatIsNotMod.CustomItems.CustomSpawnableData">
+            <summary>
+            Used in RecreatePools to determine which custom spawnables need to have a pool registered.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.ModPref`1.CreateEntry(System.Boolean)">
+            <summary>
+            Creates an entry in MelonPreferences.cfg
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.ModPref`1.SetValue(`0)">
+            <summary>
+            Sets the value in MelonPreferences.cfg
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.ModPref`1.ReadValue">
+            <summary>
+            Reads the value from MelonPreferences.cfg
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.MonoBehaviours.CustomMonoBehaviourHandler.SetFieldValues(UnityEngine.MonoBehaviour)">
+            <summary>
+            Sets the values of all fields on the custom monobehaviour.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.MonoBehaviours.CustomMonoBehaviourHandler.SaveCustomMonoBehaviour``1(UnityEngine.GameObject)">
+            <summary>
+            Reads the values of the monobehaviour and saves them to be applied later.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.MonoBehaviours.CustomMonoBehaviourHandler.AddMonoBehavioursFromJson(UnityEngine.GameObject)">
+            <summary>
+            Adds an instance of the given monobehaviour where it's needed
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.MonoBehaviours.CustomMonoBehaviourHandler.AddMonoBehavioursFromJson(UnityEngine.GameObject,Newtonsoft.Json.JsonSerializerSettings)">
+            <summary>
+            Adds an instance of the given monobehaviour where it's needed
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.MonoBehaviours.CustomMonoBehaviourHandler.SaveTypeValues(System.Type,System.Collections.Generic.Dictionary{System.String,System.Object},UnityEngine.GameObject)">
+            <summary>
+            Adds the field values to a dictionary and updates the localized text component so it can be accessed later.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.MonoBehaviours.CustomMonoBehaviourHandler.LoadAndRegisterMonoBehavioursFromUserData">
+            <summary>
+            Loads all .dlls in the folder for them, finds all monobehaviours, and registers them in the il2cpp domain
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.MonoBehaviours.CustomMonoBehaviourHandler.RegisterAllInAssembly(System.Reflection.Assembly)">
+            <summary>
+            Finds every MonoBehaviour in the assembly and registers it
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.MonoBehaviours.CustomMonoBehaviourHandler.RegisterAndReturnAllInAssembly(System.Reflection.Assembly)">
+            <summary>
+            Finds every MonoBehaviour in the assembly and registers it
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.MonoBehaviours.CustomMonoBehaviourHandler.GetDllFilePaths(System.String)">
+            <summary>
+            Recursively finds all .dll files in the given path.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.MonoBehaviours.GunFireModes.CycleFireMode">
+            <summary>
+            Go to the next fire mode and play the dry fire sound so the player knows it worked
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.MonoBehaviours.InstantiateOnGunCharge.OnGunCharge">
+            <summary>
+            Instantiates all children of self.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.MonoBehaviours.Shotgun.OnGunFire(StressLevelZero.Props.Weapons.Gun)">
+            <summary>
+            Instantiate more bullets at random angles
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.MonoBehaviours.SimpleGunModifiers.Update">
+            <summary>
+            Handles gun charging
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.MonoBehaviours.InstantiateOnFire.OnGunFire(StressLevelZero.Props.Weapons.Gun)">
+            <summary>
+            Instantiates all children of self.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Hooking.InitHooks">
+            <summary>
+            Creates default hooks and runs delayed ones.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Hooking.CreateHook(System.Reflection.MethodInfo,System.Reflection.MethodInfo,System.Boolean)">
+            <summary>
+            Hooks the method and debug logs some info.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Player.FindObjectReferences">
+            <summary>
+            Finds and assigns the hand and controller components to their variables.
+            Hands can be used to find held objects and controllers for input.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Player.GetRigManager">
+            <summary>
+            Returns the root gameobject in the player rig manager.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Player.GetPlayerHead">
+            <summary>
+            Returns the gameobject of the player's head.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Player.GetComponentInHand``1(StressLevelZero.Interaction.Hand)">
+            <summary>
+            Generic method for getting any component on the object the player is holding.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.Player.GetObjectInHand(StressLevelZero.Interaction.Hand)">
+            <summary>
+            Returns the object the given hand is holding or null if the hand is null.
+            </summary>
+        </member>
+        <member name="T:ModThatIsNotMod.Pooling.SimplePoolManager">
+            <summary>
+            Adamdev had some issue with this so probably just stick to the vanilla pools
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.RandomShit.AdManager.CreateBaseAd">
+            <summary>
+            So basically when I was making this I wasn't using any asset bundles yet and I wanted to keep it that way for whatever reason, so instead of just making an asset bundle with the prefab in it like a normal person, I somehow convinced myself that it was a perfectly sane idea to instead manually create the gameobject with a grip component and text and all that fun stuff through code, and that's how this absolute monstrosity of a function came into existence :)
+            </summary>
+        </member>
+        <member name="T:ModThatIsNotMod.RandomShit.TabloidMode">
+            <summary>
+            Yes.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.RandomShit.TabloidMode.DoTabloidStuff">
+            <summary>
+            Yes.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.SimpleHelpers.GetCleanObjectName(System.String)">
+            <summary>
+            Removes things like [2] and (Clone)
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.SpawnMenu.PrePopulateSpawnMenu(StressLevelZero.UI.Radial.SpawnablesPanelView)">
+            <summary>
+            Adds all custom spawnable objects into the spawn gun right before the menu opens.
+            </summary>
+        </member>
+        <member name="M:ModThatIsNotMod.VersionChecking.CheckModVersion(MelonLoader.MelonMod,System.String)">
+            <summary>
+            Checks if there's a newer version of the mod on thunderstore.io and tells the user if there is.
+            </summary>
+        </member>
+    </members>
+</doc>
