@@ -1,0 +1,17 @@
+{
+  "name": "tv.liv.mod.boneworks",
+  "version": "1.0.0",
+  "description": "Boneworks LIV Volcap Mod",
+  "publishConfig":{
+    "registry": "https://npm.liv-latveria.com"
+  },
+  "keywords": [
+    "liv",
+    "mod"
+  ],
+  "author": {
+    "name": "LIV",
+    "email": "techteam@liv.tv",
+    "url": "https://liv.tv/"
+  }
+}
